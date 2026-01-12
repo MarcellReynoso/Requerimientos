@@ -1,0 +1,7 @@
+﻿@model IGrid<Movimiento>
+
+<tr>
+    <td colspan="7"><b>Sum</b></td>
+    <td><b>@(Model.Rows.Sum(row => row.Model.HorometroTotal))</b></td>
+    <td></td>
+</tr>

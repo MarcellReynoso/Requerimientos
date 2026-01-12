@@ -1,0 +1,77 @@
+﻿@model Requerimientos.Models.Pertenece
+
+@{
+    ViewData["Title"] = "Editar pertenece";
+}
+
+<div class="container-fluid px-0 px-md-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Editar registro</h2>
+            <small class="text-muted">ID: @Model.Id</small>
+        </div>
+
+        <div class="d-none d-md-flex gap-2">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </a>
+            <button type="submit" form="frmPerteneceEdit" class="btn btn-primary">
+                <i class="bi bi-floppy"></i> Guardar
+            </button>
+        </div>
+    </div>
+
+    <div class="card border-0">
+        <div class="card-body p-0">
+            <form asp-action="Edit" method="post" id="frmPerteneceEdit" novalidate>
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="border rounded-4 p-3 bg-white">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                                    <i class="bi bi-geo-alt" style="font-size:1.2rem;"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Información</div>
+                                    <div class="text-muted small">Actualiza los datos</div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label asp-for="Nombre" class="form-label mb-1">
+                                        Nombre <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Nombre" class="form-control" autocomplete="off" autofocus />
+                                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex d-md-none gap-2 mt-4">
+                    <a asp-action="Index" class="btn btn-secondary w-50">
+                        <i class="bi bi-arrow-left"></i> Regresar
+                    </a>
+                    <button type="submit" class="btn btn-primary w-50">
+                        <i class="bi bi-floppy"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,193 @@
+﻿@model Requerimientos.Models.Producto
+
+@{
+    ViewData["Title"] = "Editar producto";
+}
+
+<div class="px-0 px-md-3 py-md-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8 col-xl-7">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="mb-0">Producto</h2>
+                    <small class="text-muted">Actualice la informacion</small>
+                </div>
+            </div>
+
+            <div class="card border-0">
+                <div class="card-body p-0">
+                    <form asp-action="Edit" method="post" id="frmProductoEdit" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreatedAt" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger d-none"
+                             role="alert"></div>
+
+                        <div class="border rounded-4 p-3 bg-white">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                                    <i class="bi bi-box-seam" style="font-size:1.2rem;"></i>
+                                </div>
+                                <div class="fw-semibold">Datos del producto</div>
+                            </div>
+
+                            <div class="row g-3">
+
+                                <!-- 1) Nombre -->
+                                <div class="col-12">
+                                    <label asp-for="Nombre" class="form-label mb-1">
+                                        Producto <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Nombre" class="form-control" autocomplete="off" placeholder="Ej: Gasolina regular" />
+                                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                                </div>
+
+                                <!-- 2) Categoría -->
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="CategoriaId" class="form-label mb-1">
+                                        Categoría <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select asp-for="CategoriaId" class="form-select" id="CategoriaId">
+                                        <option value="" disabled>Seleccione una opción</option>
+                                        @foreach (var c in ViewBag.CategoriasData)
+                                        {
+                                            <option value="@c.Id" data-prefijo="@c.Prefijo">
+                                                @c.Nombre
+                                            </option>
+                                        }
+                                    </select>
+
+                                    <span asp-validation-for="CategoriaId" class="text-danger small"></span>
+
+                                    <!-- Prefijo visible (COM-, TEC-, etc.) -->
+                                    <small class="text-muted d-block mt-1">
+                                        Prefijo: <span class="fw-semibold" id="spnPrefijo">-</span>
+                                    </small>
+                                </div>
+
+                                <!-- 3) Código dinámico -->
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label mb-1">
+                                        Código <span class="text-danger">*</span>
+                                    </label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="spnPrefijoInput">-</span>
+                                        <input type="number"
+                                               min="1"
+                                               class="form-control"
+                                               id="CodigoNumero"
+                                               placeholder="Ej: 1"
+                                               inputmode="numeric"
+                                               autocomplete="off" />
+                                    </div>
+
+                                    <!-- Campo real que se envía al backend -->
+                                    <input asp-for="Codigo" type="hidden" id="Codigo" />
+
+                                    <small class="text-muted d-block mt-1">
+                                        Código final: <span class="fw-semibold" id="spnCodigoFinal">-</span>
+                                    </small>
+                                    <span asp-validation-for="Codigo" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Almacén (Pertenece) -->
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="PerteneceId" class="form-label mb-1">
+                                        Almacén <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="PerteneceId" asp-items="ViewBag.Perteneces" class="form-select">
+                                        <option value="" disabled>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="PerteneceId" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label asp-for="Unidad" class="form-label mb-1">Unidad</label>
+                                    <input asp-for="Unidad" class="form-control text-uppercase" autocomplete="off" placeholder="Ej: GLN" id="Unidad" />
+                                    <span asp-validation-for="Unidad" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label asp-for="StockMinimo" class="form-label mb-1">Stock mínimo</label>
+                                    <input asp-for="StockMinimo" class="form-control" inputmode="decimal" type="number" step="0.001" autocomplete="off" />
+                                    <span asp-validation-for="StockMinimo" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label asp-for="Proviene" class="form-label mb-1">Proviene</label>
+                                    <select asp-for="Proviene" class="form-select">
+                                        <option value="" disabled selected>Seleccionar</option>
+                                        <option value="Compra">Compra</option>
+                                        <option value="Almacen central">Almacen central</option>
+                                    </select>
+                                    <span asp-validation-for="Proviene" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label asp-for="Condicion" class="form-label mb-1">Condición</label>
+                                    <select asp-for="Condicion" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                        <option value="Nuevo">Nuevo</option>
+                                        <option value="Usado">Usado</option>
+                                    </select>
+                                    <span asp-validation-for="Condicion" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label asp-for="NroRequerimiento" class="form-label mb-1">Nro requerimiento</label>
+                                    <input asp-for="NroRequerimiento" class="form-control" autocomplete="off" />
+                                    <span asp-validation-for="NroRequerimiento" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label asp-for="AreaRequerimiento" class="form-label mb-1">Área requerimiento</label>
+                                    <input asp-for="AreaRequerimiento" class="form-control" autocomplete="off" placeholder="Ej: CONSTRUCCION" />
+                                    <span asp-validation-for="AreaRequerimiento" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Acciones (desktop) -->
+                                <div class="d-none d-md-flex justify-content-between gap-2">
+                                    <a asp-action="Index" class="btn btn-secondary">
+                                        <i class="bi bi-arrow-left"></i> Regresar
+                                    </a>
+                                    <button type="submit" form="frmProductoEdit" class="btn btn-primary">
+                                        <i class="bi bi-floppy"></i> Guardar cambios
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Acciones (mobile) -->
+                        <div class="d-flex d-md-none gap-2 mt-4">
+                            <a asp-action="Index" class="btn btn-secondary w-50">
+                                <i class="bi bi-arrow-left"></i> Regresar
+                            </a>
+                            <button type="submit" form="frmProductoEdit" class="btn btn-primary">
+                                <i class="bi bi-floppy"></i> Guardar cambios
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/categorias/productos-edit.js"></script>
+}

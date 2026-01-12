@@ -1,0 +1,103 @@
+﻿@model Requerimientos.Models.Combustible
+
+@{
+    ViewData["Title"] = "Detalles control de combustible";
+}
+
+<div class="px-0 px-md-3 py-md-3">
+    <!-- Centro -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8 col-xl-7">
+
+            <!-- Encabezado -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="mb-0">Control de combustible</h2>
+                </div>
+            </div>
+
+            <div class="card border-0">
+                <div class="card-body p-0">
+                    <div class="border rounded-4 p-3 bg-white">
+
+                        <!-- Header con icono -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                 style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                                <i class="bi bi-fuel-pump" style="font-size:1.2rem;"></i>
+                            </div>
+                            <div>
+                                <div class="fw-semibold">Resumen</div>
+                                <small class="text-muted">ID: @Model.Id</small>
+                            </div>
+                        </div>
+
+                        <dl class="row mb-0">
+                            <dt class="col-4 text-muted fw-normal">Fecha</dt>
+                            <dd class="col-8 mb-2">@Model.Fecha.ToString("dd/MM/yyyy")</dd>
+
+                            <dt class="col-4 text-muted fw-normal">Hora entrega</dt>
+                            <dd class="col-8 mb-2">@Model.HoraEntrega?.ToString("HH:mm")</dd>
+
+                            <dt class="col-4 text-muted fw-normal">Maquinaria</dt>
+                            <dd class="col-8 mb-2">@Model.Clase?.Nombre</dd>
+
+                            <dt class="col-4 text-muted fw-normal">Responsable</dt>
+                            <dd class="col-8 mb-2">@Model.Responsable?.Nombre</dd>
+
+                            <dt class="col-4 text-muted fw-normal">Quién recibe</dt>
+                            <dd class="col-8 mb-2">@Model.QuienRecibe?.Nombre</dd>
+
+                            <hr class="my-2" />
+
+                            <dt class="col-4 text-muted fw-normal">Glns entregado</dt>
+                            <dd class="col-8 mb-2">@Model.GlnsEntregado?.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</dd>
+
+                            <dt class="col-4 text-muted fw-normal">Litros</dt>
+                            <dd class="col-8 mb-2">@Model.Litros?.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</dd>
+
+                            <dt class="col-4 text-muted fw-normal">Glns x litro</dt>
+                            <dd class="col-8 mb-2">@Model.GlnsXLitro.ToString(System.Globalization.CultureInfo.InvariantCulture)</dd>
+
+                            <dt class="col-4 text-muted fw-normal">Galones recibidos</dt>
+                            <dd class="col-8 mb-2">@((Model.GalonesRecibidos.HasValue) ? Model.GalonesRecibidos.Value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture) : "-")</dd>
+
+                            <dt class="col-4 text-muted fw-normal">Costo x galón</dt>
+                            <dd class="col-8 mb-2">S/ @Model.CostoXGalon.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</dd>
+
+                            <hr class="my-2" />
+
+                            <dt class="col-4 text-muted fw-normal">Total galones (calculado)</dt>
+                            <dd class="col-8 mb-2">@Model.TotalGalones.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</dd>
+
+                            <dt class="col-4 text-muted fw-normal">Precio total (calculado)</dt>
+                            <dd class="col-8 mb-2">S/ @Model.PrecioTotal.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)</dd>
+                        </dl>
+
+                        <div class="d-flex justify-content-between gap-2 mt-3">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Regresar
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <!-- Acciones (mobile extra, por si quieres igual que tus otras vistas) -->
+                    <div class="d-flex d-md-none gap-2 mt-4">
+                        <a asp-action="Index" class="btn btn-secondary w-50">
+                            <i class="bi bi-arrow-left"></i> Regresar
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary w-50">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

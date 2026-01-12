@@ -1,0 +1,105 @@
+﻿@model Requerimientos.Models.Categoria
+
+@{
+    ViewData["Title"] = "Nueva categoría";
+}
+
+<div class="px-0 px-md-3 py-md-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8 col-xl-7">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="mb-0">Categoría</h2>
+                    <small class="text-muted">Registre una nueva categoría</small>
+                </div>
+            </div>
+
+            <div class="card border-0">
+                <div class="card-body p-0">
+                    <form asp-action="Create" method="post" id="frmCategoriaCreate" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger d-none"
+                             role="alert"></div>
+
+                        <div class="border rounded-4 p-3 bg-white">
+
+                            <!-- Header -->
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                                    <i class="bi bi-tags" style="font-size:1.2rem;"></i>
+                                </div>
+                                <div class="fw-semibold">Datos de la categoría</div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-8">
+                                    <label asp-for="Nombre" class="form-label mb-1">
+                                        Nombre <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Nombre"
+                                           class="form-control"
+                                           autocomplete="off"
+                                           autofocus/>
+                                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="Prefijo" class="form-label mb-1">
+                                        Prefijo <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Prefijo"
+                                           class="form-control text-uppercase"
+                                           autocomplete="off"
+                                           maxlength="10"/>
+                                    <span asp-validation-for="Prefijo" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Acciones desktop -->
+                                <div class="d-none d-md-flex justify-content-between gap-2">
+                                    <a asp-action="Index" class="btn btn-secondary">
+                                        <i class="bi bi-arrow-left"></i> Regresar
+                                    </a>
+                                    <button type="submit" form="frmCategoriaCreate" class="btn btn-primary">
+                                        <i class="bi bi-floppy"></i> Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Acciones mobile -->
+                        <div class="d-flex d-md-none gap-2 mt-4">
+                            <a asp-action="Index" class="btn btn-secondary w-50">
+                                <i class="bi bi-arrow-left"></i> Regresar
+                            </a>
+                            <button type="submit" class="btn btn-primary w-50">
+                                <i class="bi bi-floppy"></i> Guardar
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Forzar prefijo en mayúsculas
+        (function () {
+            const el = document.getElementById("Prefijo");
+            if (!el) return;
+            el.addEventListener("input", () => {
+                el.value = (el.value || "").toUpperCase().replace(/\s+/g, "");
+            });
+        })();
+    </script>
+}

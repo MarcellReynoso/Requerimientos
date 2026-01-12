@@ -1,0 +1,211 @@
+﻿@model Requerimientos.Models.Movimiento
+
+@{
+    ViewData["Title"] = "Crear movimiento";
+    var timeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
+    var fecha = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+}
+
+<div class="container-fluid px-0 px-md-3">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+            <h2 class="mb-0" style="font-size:1.5rem">Nuevo movimiento</h2>
+            <small class="text-muted">Registre la información</small>
+        </div>
+
+        <div class="d-none d-md-flex gap-2">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </a>
+            <button type="submit" form="frmMovCreate" class="btn btn-primary">
+                <i class="bi bi-floppy"></i> Guardar
+            </button>
+        </div>
+    </div>
+
+    <div class="card border-0">
+        <div class="card-body p-0">
+            <form asp-action="Create" method="post" id="frmMovCreate" novalidate>
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 mb-2" role="alert"></div>
+
+                <!-- CONTENEDOR PRINCIPAL (2 columnas) -->
+                <div class="border rounded-4 p-3 bg-white">
+                    <div class="row g-3 align-items-stretch">
+                        <!-- COLUMNA IZQUIERDA: Datos + Horómetros -->
+                        <div class="col-12 col-lg-6">
+                            <!-- Header Datos -->
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:34px;height:34px;background:rgba(13,110,253,.12);">
+                                    <i class="bi bi-clipboard-data" style="font-size:1.1rem;"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Datos del movimiento</div>
+                                    <div class="text-muted small">Complete la información</div>
+                                </div>
+                            </div>
+
+                            <!-- Fecha / Horas -->
+                            <div class="row g-2 mb-4">
+                                <div class="col-4">
+                                    <label asp-for="Fecha" class="form-label mb-1">
+                                        Fecha <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Fecha"
+                                           type="date"
+                                           class="form-control"
+                                           value="@fecha.ToString("yyyy-MM-dd")" />
+                                    <span asp-validation-for="Fecha" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-4">
+                                    <label asp-for="HoraSalida" class="form-label mb-1">
+                                        Hora salida
+                                    </label>
+                                    <input asp-for="HoraSalida" type="time" class="form-control" value="" />
+                                    <span asp-validation-for="HoraSalida" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-4">
+                                    <label asp-for="HoraIngreso" class="form-label mb-1">
+                                        Hora ingreso
+                                    </label>
+                                    <input asp-for="HoraIngreso" type="time" class="form-control" value="" />
+                                    <span asp-validation-for="HoraIngreso" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Selects (2x2) -->
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="VehiculoId" class="form-label mb-1">
+                                        Vehículo <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="VehiculoId" asp-items="ViewBag.Vehiculos" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="VehiculoId" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="PerteneceId" class="form-label mb-1">
+                                        Pertenece <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="PerteneceId" asp-items="ViewBag.Perteneces" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="PerteneceId" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="ProveedorId" class="form-label mb-1">
+                                        Proveedor <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="ProveedorId" asp-items="ViewBag.Proveedores" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="ProveedorId" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <!-- Header Horómetros -->
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:34px;height:34px;background:rgba(25,135,84,.12);">
+                                    <i class="bi bi-speedometer2" style="font-size:1.1rem;"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Horómetros / Volquete</div>
+                                    <div class="text-muted small">Totales se calculan al guardar</div>
+                                </div>
+                            </div>
+
+                            <!-- Horómetros en 2 filas  -->
+                            <div class="row g-2">
+                                <!-- Fila 1 -->
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="HorometroInicio" class="form-label mb-1">Horómetro inicio</label>
+                                    <input asp-for="HorometroInicio" class="form-control" inputmode="numeric" type="number" value="" autocomplete="off" step="0.5"/>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="HorometroFinal" class="form-label mb-1">Horómetro final</label>
+                                    <input asp-for="HorometroFinal" class="form-control" inputmode="numeric" type="number" value="" autocomplete="off" />
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="VueltasVolq" class="form-label mb-1">
+                                        Vueltas
+                                    </label>
+                                    <input asp-for="VueltasVolq" class="form-control" inputmode="numeric" type="number" value="" autocomplete="off" />
+                                </div>
+
+                                <!-- Fila 2 -->
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="HorometroInicio2" class="form-label mb-1">Horómetro inicio 2</label>
+                                    <input asp-for="HorometroInicio2" class="form-control" inputmode="numeric" type="number" value="" autocomplete="off" />
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="HorometroFinal2" class="form-label mb-1">Horómetro final 2</label>
+                                    <input asp-for="HorometroFinal2" class="form-control" inputmode="numeric" type="number" value="" autocomplete="off" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- COLUMNA DERECHA: Motivo + Observaciones -->
+                        <div class="col-12 col-lg-6 d-flex flex-column">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:34px;height:34px;background:rgba(13,110,253,.12);">
+                                    <i class="bi bi-chat-left-text" style="font-size:1.05rem;"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Motivo y observaciones</div>
+                                </div>
+                            </div>
+
+                            <!-- Motivo ocupa más altura -->
+                            <div class="flex-grow-1 d-flex flex-column mb-2">
+                                <label asp-for="Motivo" class="form-label mb-1">Motivo</label>
+                                <textarea asp-for="Motivo"
+                                          class="form-control flex-grow-1"
+                                          style="min-height: 220px;"
+                                          autocomplete="off"
+                                          placeholder="Escriba el motivo del movimiento..."></textarea>
+                                <span asp-validation-for="Motivo" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Observaciones abajo -->
+                            <div>
+                                <label asp-for="Observaciones" class="form-label mb-1">Observaciones</label>
+                                <textarea asp-for="Observaciones"
+                                          class="form-control"
+                                          rows="4"
+                                          autocomplete="off"
+                                          placeholder="Opcional..."></textarea>
+                                <span asp-validation-for="Observaciones" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones (mobile) -->
+                <div class="d-flex d-md-none gap-2 mt-3">
+                    <a asp-action="Index" class="btn btn-secondary w-50">
+                        <i class="bi bi-arrow-left"></i> Regresar
+                    </a>
+                    <button type="submit" class="btn btn-primary w-50">
+                        <i class="bi bi-floppy"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,229 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+
+    var pintarRequerimientos = controller == "Requerimientos" || controller == "Compras";
+    var pintarMovimientos = controller == "Movimientos" || controller == "Combustibles"|| controller == "PagosMaquinaria";
+    var pintarInventario = controller == "Productos" || controller == "Kardex";
+}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
+  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+  <link href="~/css/styles.min.css" rel="stylesheet" />  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link href="~/css/simplebar.css" rel="stylesheet" />
+  <link rel="stylesheet" href="~/lib/mvc-grid/mvc-grid.css" asp-append-version="true" />
+</head>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar">
+      <!-- Sidebar scroll-->
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+          <a href="./index.html" class="text-nowrap logo-img">
+            @* <img src="../assets/images/logos/logo.svg" alt="" /> *@
+          </a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8">
+                <iconify-icon icon="solar:close-circle-line-duotone" class="fs-5"></iconify-icon>
+            </i>
+          </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="nav-small-cap">
+              <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
+              <span class="hide-menu">Inicio</span>
+            </li>
+            @* Inicio *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Home" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="mdi:home"></iconify-icon>
+                    <span class="hide-menu">Inicio</span>
+                </a>
+            </li>
+            @* Requerimientos *@
+            <li class="sidebar-item">
+                <a  asp-controller="Requerimientos"
+                    asp-action="Index"
+                    class="sidebar-link @(pintarRequerimientos ? "active" : "")">
+                    <i class="bi bi-file-earmark-text"></i>
+                    Requerimientos
+                </a>
+            </li>
+            @* Movimiento maquinaria *@
+            <li class="sidebar-item">
+                <a  class="sidebar-link @(pintarMovimientos ? "active" : "")"
+                    asp-controller="Movimientos" 
+                    asp-action="Index" 
+                    aria-expanded="false">
+                    <iconify-icon icon="material-symbols:move"></iconify-icon>
+                    <span class="hide-menu">Mov. maquinaria</span>
+                </a>
+            </li>
+            @* Inventario *@
+            <li class="sidebar-item">
+                <a  class="sidebar-link @(pintarInventario ? "active" : "")"
+                    asp-controller="Productos" 
+                    asp-action="Index" 
+                    aria-expanded="false">
+                    <iconify-icon icon="ic:baseline-inventory"></iconify-icon>
+                    <span class="hide-menu">Inventario</span>
+                </a>
+            </li>
+            <li>
+                <span class="sidebar-divider lg"></span>
+            </li>
+            @* Configuracion *@
+            <li class="nav-small-cap">
+                <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
+                <span class="hide-menu">Configuración</span>
+            </li>
+            @* Categorias *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Categorias" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="tabler:category-filled"></iconify-icon>
+                    <span class="hide-menu">Categorias</span>
+                </a>
+            </li>
+            @* Clases *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Clases" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="ic:baseline-class"></iconify-icon>
+                    <span class="hide-menu">Clases</span>
+                </a>
+            </li>
+            @* Kardex *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Kardex" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="ic:baseline-class"></iconify-icon>
+                    <span class="hide-menu">Kardex</span>
+                </a>
+            </li>
+            @* Pertenece *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Pertenece" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="ic:sharp-people-alt"></iconify-icon>
+                    <span class="hide-menu">Pertenece</span>
+                </a>
+            </li>
+            @* Productos *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Productos" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="bi:box-seam-fill"></iconify-icon>
+                    <span class="hide-menu">Productos</span>
+                </a>
+            </li>
+            @* Proveedores *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Proveedores" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="streamline-plump:office-worker-solid"></iconify-icon>
+                    <span class="hide-menu">Proveedores</span>
+                </a>
+            </li>
+            @* Trabajadores *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Trabajadores" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="mdi:worker"></iconify-icon>
+                    <span class="hide-menu">Trabajadores</span>
+                </a>
+            </li>
+            @* Unidades *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Unidades" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="mdi:card-plus"></iconify-icon>
+                    <span class="hide-menu">Unidades</span>
+                </a>
+            </li>
+            @* Vehiculos *@
+            <li class="sidebar-item">
+                <a class="sidebar-link" asp-controller="Vehiculos" asp-action="Index" aria-expanded="false">
+                    <iconify-icon icon="fluent:vehicle-car-profile-ltr-24-filled"></iconify-icon>
+                    <span class="hide-menu">Vehiculos</span>
+                </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+    </aside>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+      <!--  Header Start -->
+      <header class="app-header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <ul class="navbar-nav">
+            <li class="nav-item d-block d-xl-none">
+              <a class="nav-link sidebartoggler " id="headerCollapse" href="javascript:void(0)">
+                <i class="ti ti-menu-2">
+                    <iconify-icon icon="solar:hamburger-menu-line-duotone" class="fs-5"></iconify-icon>
+                </i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <!--  Header End -->
+      <div class="body-wrapper-inner">
+        <div class="container-xl px-4">
+            @* Condicional para el alert de TempData["Mensaje"] *@
+            @if (TempData["Mensaje"] != null)
+            {
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const modals = document.querySelectorAll('.modal.show');
+                    if (modals.length > 0) {
+                        $(modals).on('hidden.bs.modal', function () {
+                            alert("@TempData["Mensaje"]");
+                        });
+                        $(modals).modal('hide');
+                    } else {
+                        alert("@TempData["Mensaje"]");
+                    }
+                });
+            </script>
+            }
+
+            @* Aqui se inyecta el modal, siempre esta cargado en el layout *@
+            <div id="modal"></div>
+
+            @* Carga de las vistas *@
+            @RenderBody()
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="~/js/sidebarmenu.js"></script>
+  <script src="~/js/app.min.js"></script>
+  <script src="~/js/simplebar.js"></script>
+  <script src="~/lib/mvc-grid/mvc-grid.js" asp-append-version="true"></script>
+    <script>
+        [].forEach.call(document.getElementsByClassName('mvc-grid'), function (element) {
+        new MvcGrid(element);
+        });
+    </script>
+  <!-- solar icons -->
+  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+
+  @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+﻿@model Requerimientos.Models.Trabajador
+
+@{
+    ViewData["Title"] = "Detalle de trabajador";
+}
+
+<div class="container-fluid px-0 px-md-3">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Detalles de trabajador</h2>
+            <small class="text-muted">ID: @Model.Id</small>
+        </div>
+
+        <div class="d-none d-md-flex gap-2">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i> Editar
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0">
+        <div class="row g-3">
+            <!-- Datos personales -->
+            <div class="col-12 col-lg-6">
+                <div class="border rounded-4 p-3 h-100 bg-white">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                            <i class="bi bi-person-badge" style="font-size:1.2rem;"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold">Datos personales</div>
+                            <div class="text-muted small">Identificación y puesto</div>
+                        </div>
+                    </div>
+        
+                    <dl class="row mb-0">
+                        <dt class="col-5 text-muted fw-normal">Nombre</dt>
+                        <dd class="col-7 mb-2">@Html.DisplayFor(m => m.Nombre)</dd>
+        
+                        <dt class="col-5 text-muted fw-normal">DNI</dt>
+                        <dd class="col-7 mb-2">@Html.DisplayFor(m => m.DNI)</dd>
+        
+                        <dt class="col-5 text-muted fw-normal">Clase</dt>
+                        <dd class="col-7 mb-2">@Html.DisplayFor(m => m.Clase)</dd>
+        
+                        <dt class="col-5 text-muted fw-normal">Cargo</dt>
+                        <dd class="col-7 mb-0">@Html.DisplayFor(m => m.Cargo)</dd>
+                    </dl>
+                </div>
+            </div>
+        
+            <!-- Cuentas bancarias -->
+            <div class="col-12 col-lg-6">
+                <div class="border rounded-4 p-3 h-100 bg-white">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width:38px;height:38px;background:rgba(25,135,84,.12);">
+                            <i class="bi bi-bank" style="font-size:1.2rem;"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold">Cuentas bancarias</div>
+                            <div class="text-muted small">Nº de cuenta y CCI</div>
+                        </div>
+                    </div>
+        
+                    <div class="row g-3">
+                        <!-- BBVA -->
+                        <div class="col-12">
+                            <div class="border rounded-4 p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="fw-semibold">BBVA</span>
+                                </div>
+        
+                                <dl class="row mb-0 small">
+                                    <dt class="col-5 text-muted fw-normal">Nro</dt>
+                                    <dd class="col-7 mb-2">@(string.IsNullOrWhiteSpace(Model?.NroBBVA) ? "Sin número" : Html.DisplayFor(m => m.NroBBVA))</dd>
+        
+                                    <dt class="col-5 text-muted fw-normal">CCI</dt>
+                                    <dd class="col-7 mb-2">@(string.IsNullOrWhiteSpace(Model?.CCIBBVA) ? "Sin número" : Html.DisplayFor(m => m.CCIBBVA))</dd>
+                                </dl>
+                            </div>
+                        </div>
+        
+                        <!-- BCP -->
+                        <div class="col-12">
+                            <div class="border rounded-4 p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="fw-semibold">BCP</span>
+                                </div>
+        
+                                <dl class="row mb-0 small">
+                                    <dt class="col-5 text-muted fw-normal">Nro</dt>
+                                    <dd class="col-7 mb-2">@(string.IsNullOrWhiteSpace(Model?.NroBCP) ? "Sin número" : Html.DisplayFor(m => m.NroBCP))</dd>
+        
+                                    <dt class="col-5 text-muted fw-normal">CCI</dt>
+                                    <dd class="col-7 mb-2">@(string.IsNullOrWhiteSpace(Model?.CCIBCP) ? "Sin número" : Html.DisplayFor(m => m.CCIBCP))</dd>
+                                </dl>
+                            </div>
+                        </div>
+        
+                        <!-- Interbank -->
+                        <div class="col-12">
+                            <div class="border rounded-4 p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="fw-semibold">Interbank</span>
+                                </div>
+        
+                                <dl class="row mb-0 small">
+                                    <dt class="col-5 text-muted fw-normal">Nro</dt>
+                                    <dd class="col-7 mb-2">@(string.IsNullOrWhiteSpace(Model?.NroInterbank) ? "Sin número" : Html.DisplayFor(m => m.NroInterbank))</dd>
+                                    <dt class="col-5 text-muted fw-normal">CCI</dt>
+                                    <dd class="col-7 mb-0">@(string.IsNullOrWhiteSpace(Model?.CCIInterbank) ? "Sin número" : Html.DisplayFor(m => m.CCIInterbank))</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de acción en movil -->
+        <div class="d-flex d-md-none gap-2 mt-4">
+            <a asp-action="Index" class="btn btn-secondary w-50">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary w-50">
+                <i class="bi bi-pencil-square"></i> Editar
+            </a>
+        </div>
+    </div>
+
+</div>

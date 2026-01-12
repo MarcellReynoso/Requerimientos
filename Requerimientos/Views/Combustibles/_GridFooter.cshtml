@@ -1,0 +1,10 @@
+﻿@model IGrid<Combustible>
+
+<tr>
+    <td colspan="3"><b>Sum</b></td>
+    <td><b>@(Model.Rows.Sum(row => row.Model.GlnsEntregado))</b></td>
+    <td><b>@(Model.Rows.Sum(row => row.Model.GalonesRecibidos))</b></td>
+    <td><b>@(Model.Rows.Sum(row => row.Model.TotalGalones))</b></td>
+    <td><b>@(Model.Rows.Sum(row => row.Model.PrecioTotal).ToString("S/ 0.00"))</b></td>
+    <td></td>
+</tr>

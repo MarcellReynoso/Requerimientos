@@ -1,0 +1,51 @@
+﻿@using NonFactors.Mvc.Grid
+@model IQueryable<Trabajador>
+
+@{
+    ViewData["Title"] = "Trabajadores";
+    var controller = (string)ViewContext.RouteData.Values["controller"]!;
+}
+
+<h1 class="h1" style="font-size: 1.5rem;">@ViewData["Title"]</h1>
+
+<div class="col-12">
+    <a asp-controller="@controller" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i>
+        Nuevo proveedor
+    </a>
+</div>
+
+<div class="tabla-ui pt-4">
+    @(
+        Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(model => model.Nombre).Titled("Nombre");
+            columns.Add(model => model.DNI).Titled("DNI");
+            columns.Add(model => model.Clase).Titled("Clase");
+            columns.Add(model => model.Cargo).Titled("Cargo");
+            columns.Add(model => model.NroBBVA).Titled("NroBBVA");
+            columns.Add(model => model.CCIBBVA).Titled("CCIBBVA");
+            columns.Add(model => model.NroBCP).Titled("NroBCP");
+            columns.Add(model => model.CCIBCP).Titled("CCIBCP");
+            @* columns.Add(model => model.NroInterbank).Titled("NroInterbank");
+            columns.Add(model => model.CCIInterbank).Titled("CCIInterbank"); *@
+            columns.Add(model =>
+            $"<a class='text-info me-2' href='{Url.Action("Details", controller, new { id = model.Id })}' title='Detalles'><i class='bi bi-eye-fill'></i></a>" +
+            $"<a class='text-warning me-2' href='{Url.Action("Edit", controller, new { id = model.Id })}' title='Editar'><i class='bi bi-pencil-fill'></i></a>" +
+            $"<a class='text-danger' href='{Url.Action("Delete", controller, new { id = model.Id })}' title='Eliminar' onclick=\"return confirm('¿Realmente desea eliminar este trabajador?');\"><i class='bi bi-trash3-fill'></i></a>"
+            ).Titled("").Encoded(false);
+
+        })
+        .Empty("No hay datos en la tabla.")
+        .Filterable()
+        .Sortable()
+        .Pageable(p =>
+        {
+            p.PageSizes = new Dictionary<Int32, String> { { 0, "Todos" }, { 5, "5" }, { 10, "10" }, { 15, "15" }, { 20, "20" } };
+            p.ShowPageSizes = true;
+            p.RowsPerPage = 15;
+        })
+        )
+</div>

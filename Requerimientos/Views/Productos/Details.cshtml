@@ -1,0 +1,71 @@
+﻿@model Requerimientos.Models.Producto
+
+@{
+    ViewData["Title"] = "Detalle de producto";
+}
+
+<div class="container-fluid px-0 px-md-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Producto</h2>
+            <small class="text-muted">Detalle del registro</small>
+        </div>
+        <div class="d-none d-md-flex gap-2">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="bi bi-pencil-fill"></i> Editar
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <dl class="row mb-0">
+
+                <dt class="col-sm-4 text-muted">Código</dt>
+                <dd class="col-sm-8 fw-semibold">@Model.Codigo</dd>
+
+                <dt class="col-sm-4 text-muted">Producto</dt>
+                <dd class="col-sm-8">@Model.Nombre</dd>
+
+                <dt class="col-sm-4 text-muted">Categoría</dt>
+                <dd class="col-sm-8">@Model.Categoria?.Nombre</dd>
+
+                <dt class="col-sm-4 text-muted">Almacén</dt>
+                <dd class="col-sm-8">@Model.Pertenece?.Nombre</dd>
+
+                <dt class="col-sm-4 text-muted">Unidad</dt>
+                <dd class="col-sm-8">@Model.Unidad</dd>
+
+                <dt class="col-sm-4 text-muted">Stock mínimo</dt>
+                <dd class="col-sm-8">@Model.StockMinimo.ToString("0.###")</dd>
+
+                <dt class="col-sm-4 text-muted">Proviene</dt>
+                <dd class="col-sm-8">@Model.Proviene</dd>
+
+                <dt class="col-sm-4 text-muted">Condición</dt>
+                <dd class="col-sm-8">@Model.Condicion</dd>
+
+                <dt class="col-sm-4 text-muted">Nro requerimiento</dt>
+                <dd class="col-sm-8">@Model.NroRequerimiento</dd>
+
+                <dt class="col-sm-4 text-muted">Área requerimiento</dt>
+                <dd class="col-sm-8">@Model.AreaRequerimiento</dd>
+
+                <dt class="col-sm-4 text-muted">Creado</dt>
+                <dd class="col-sm-8">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+            </dl>
+
+            <div class="d-flex d-md-none gap-2 mt-3">
+                <a asp-action="Index" class="btn btn-secondary w-50">
+                    <i class="bi bi-arrow-left"></i> Regresar
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning w-50">
+                    <i class="bi bi-pencil-fill"></i> Editar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+﻿@using NonFactors.Mvc.Grid
+@model IQueryable<Requerimientos.Models.Movimiento>
+
+@{
+    ViewData["Title"] = "Movimientos";
+    var controller = (string)ViewContext.RouteData.Values["controller"]!;
+}
+
+<h1 class="h1" style="font-size: 1.5rem;">@ViewData["Title"]</h1>
+
+@* Seleccionar pestaña *@
+@await Html.PartialAsync("_Tabs")
+
+<div class="col-12">
+    <a asp-controller="@controller" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i>
+        Nuevo movimiento
+    </a>
+</div>
+
+<div class="tabla-ui pt-4">
+    @(
+        Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            @* columns.Add(m => m.Id).Titled("Id"); *@
+            columns.Add(m => m.Fecha).Titled("Fecha").Formatted("{0:dd/MM/yyyy}");
+
+            columns.Add(m => m.Vehiculo!.Placa).Titled("Placa");
+            columns.Add(m => m.Vehiculo!.Clase!.Nombre).Titled("Clase");
+            columns.Add(m => m.Pertenece!.Nombre).Titled("Pertenece");
+            columns.Add(m => m.Proveedor!.Nombre).Titled("Proveedor");
+
+            columns.Add(m => m.TotalMinutos).Titled("Minutos");
+            columns.Add(m => m.HorometroTotal).Titled("Horómetro");
+            columns.Add(m => m.TotalM3Desm).Titled("M3 Desm");
+
+            columns.Add(m =>
+            $"<a class='text-info me-2' href='{Url.Action("Details", controller, new { id = m.Id })}' title='Detalles'><i class='bi bi-eye-fill'></i></a>" +
+            $"<a class='text-warning me-2' href='{Url.Action("Edit", controller, new { id = m.Id })}' title='Editar'><i class='bi bi-pencil-fill'></i></a>" +
+            $"<a class='text-danger' href='{Url.Action("Delete", controller, new { id = m.Id })}' title='Eliminar' onclick=\"return confirm('¿Eliminar este movimiento?');\"><i class='bi bi-trash3-fill'></i></a>"
+            ).Titled("").Encoded(false);
+        })
+        .Empty("No hay datos en la tabla.")
+        .Filterable()
+        .Sortable()
+        .UsingFooter("_GridFooter")
+        .Pageable(p =>
+        {
+            p.PageSizes = new Dictionary<int, string> { { 0, "Todos" }, { 5, "5" }, { 10, "10" }, { 15, "15" }, { 20, "20" } };
+            p.ShowPageSizes = true;
+            p.RowsPerPage = 15;
+        })
+        
+        )
+</div>

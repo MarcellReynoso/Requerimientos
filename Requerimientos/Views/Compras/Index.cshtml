@@ -1,0 +1,94 @@
+﻿@using NonFactors.Mvc.Grid
+@model Requerimientos.Models.ViewModels.CompraKPISViewModel
+
+@{
+    ViewData["Title"] = "Compras";
+    string Soles(decimal valor) => $"S/ {valor:N2}";
+}
+
+<h1 class="h1" style="font-size: 1.5rem;">Compras</h1>
+
+@* Tabs compartidas *@
+@await Html.PartialAsync("_Tabs")
+
+@* Botón crear *@
+<div class="mb-2">
+        <a asp-controller="Compras" asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i>
+            Nueva compra
+        </a>
+    </div>
+
+@* KPIs estilo Excel *@
+<div class="card shadow-sm mb-3">
+        <div class="card-body">
+
+            <div class="row g-3 align-items-center mb-3">
+                <div class="col-md-3">
+                    <label class="form-label mb-1">Caja chica inicial</label>
+                    <input class="form-control" value="500" readonly />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mb-1">Suma caja</label>
+                    <input class="form-control" value="@Soles(Model.SumaCaja)" readonly />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mb-1">Diferencia</label>
+                    <input class="form-control @(Model.DiferenciaCaja < 0 ? "text-danger" : "")"
+                           value="@(Model.DiferenciaCaja < 0 ? "-" + Soles(Math.Abs(Model.DiferenciaCaja)) : Soles(Model.DiferenciaCaja))"
+                           readonly />
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label mb-1">Total</label>
+                    <input class="form-control" value="@Soles(Model.Total)" readonly />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label mb-1">Subtotales</label>
+                    <input class="form-control" value="@Soles(Model.Subtotal)" readonly />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+@* Tabla Compras *@
+<div class="tabla-ui pt-2">
+        @(Html
+                .Grid(Model.Compras)
+                .Build(columns =>
+                {
+                    columns.Add(c => c.Fecha).Titled("FECHA").Formatted("{0:dd/MM/yyyy}");
+                    columns.Add(c => c.Nombre).Titled("NOMBRE PRODUCTO");
+                    columns.Add(c => c.Cantidad).Titled("CANTIDAD COMPRA");
+                    columns.Add(c => c.Unidad).Titled("UNIDAD");
+                    columns.Add(c => c.Proveedor.Nombre).Titled("PROVEEDOR");
+                    columns.Add(c => c.CondicionPago).Titled("CONDICIÓN PAGO");
+
+                    columns.Add(c => c.Monto)
+                    .Titled("MONTO")
+                    .RenderedAs(c => c.Monto.HasValue ? Soles(c.Monto.Value) : "");
+
+                    columns.Add(c => c.NroDocumento).Titled("NRO DOCUMENTO");
+                    columns.Add(c => c.Evidencia).Titled("EVIDENCIA PAGO");
+                    columns.Add(c => c.Comprador).Titled("QUIÉN COMPRÓ");
+
+                    columns.Add(c => c.Ingreso)
+                    .Titled("INGRESO CAJA")
+                    .RenderedAs(c => c.Ingreso.HasValue ? Soles(c.Ingreso.Value) : "");
+                })
+                .Empty("No hay registros.")
+                .Filterable()
+                .Sortable()
+                .Pageable(p =>
+                {
+                    p.PageSizes = new Dictionary<int, string> {
+                { 0, "Todos" }, { 5, "5" }, { 10, "10" }, { 15, "15" }, { 20, "20" }
+                };
+                    p.ShowPageSizes = true;
+                    p.RowsPerPage = 10;
+                })
+                )
+    </div>

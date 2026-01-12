@@ -1,0 +1,61 @@
+﻿@using NonFactors.Mvc.Grid
+@model IQueryable<Requerimientos.Models.Combustible>
+
+@{
+    ViewData["Title"] = "Control de combustible";
+}
+
+<h1 class="h1" style="font-size:1.5rem;">@ViewData["Title"]</h1>
+
+@* Seleccionar pestaña *@
+@await Html.PartialAsync("_Tabs")
+
+<div class="col-12 mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i>
+        Nuevo registro
+    </a>
+</div>
+
+<div class="tabla-ui pt-3">
+    @(
+        Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(m => m.Fecha).Titled("Fecha").Formatted("{0:dd/MM/yyyy}");
+            columns.Add(m => m.Clase!.Nombre).Titled("Maquinaria");
+            columns.Add(m => m.Litros).Titled("Litros");
+            columns.Add(m => m.GlnsEntregado).Titled("Glns entregado");
+            columns.Add(m => m.GalonesRecibidos).Titled("Galones recibidos");
+            @* columns.Add(m => m.CostoXGalon).Titled("Costo x galón").Formatted("S/ {0:N2}"); *@
+            columns.Add(m => m.TotalGalones).Titled("Total galones");
+            columns.Add(m => m.PrecioTotal).Titled("Precio total").Formatted("S/ {0:N2}");
+            columns.Add(m =>
+            "<a class='text-info me-2' href='" + Url.Action("Details", new { id = m.Id }) + "' title='Detalles'>" +
+            "<i class='bi bi-eye-fill'></i></a>" +
+            "<a class='text-warning me-2' href='" + Url.Action("Edit", new { id = m.Id }) + "' title='Editar'>" +
+            "<i class='bi bi-pencil-fill'></i></a>" +
+            "<a class='text-danger' href='" + Url.Action("Delete", new { id = m.Id }) + "' " +
+            "onclick=\"return confirm('¿Eliminar este registro?');\" title='Eliminar'>" +
+            "<i class='bi bi-trash3-fill'></i></a>"
+            ).Encoded(false).Titled("");
+        })
+        .Empty("No hay registros de combustible.")
+        .Filterable()
+        .Sortable()
+        .UsingFooter("_GridFooter")
+        .Pageable(p =>
+        {
+            p.PageSizes = new Dictionary<int, string>
+        {
+        { 0, "Todos" },
+        { 5, "5" },
+        { 10, "10" },
+        { 20, "20" }
+        };
+            p.ShowPageSizes = true;
+            p.RowsPerPage = 10;
+        })
+        )
+</div>

@@ -1,0 +1,42 @@
+﻿@using NonFactors.Mvc.Grid
+@model IQueryable<Requerimientos.Models.Pertenece>
+
+@{
+    ViewData["Title"] = "Pertenece";
+    var controller = (string)ViewContext.RouteData.Values["controller"]!;
+}
+
+<h1 class="h1" style="font-size: 1.5rem;">@ViewData["Title"]</h1>
+
+<div class="col-12">
+    <a asp-controller="@controller" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i>
+        Nuevo registro
+    </a>
+</div>
+
+<div class="tabla-ui pt-4">
+    @(
+        Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(m => m.Nombre).Titled("Nombre");
+            @* Botones de accion *@
+            columns.Add(m =>
+            $"<a class='text-info me-2' href='{Url.Action("Details", controller, new { id = m.Id })}' title='Detalles'><i class='bi bi-eye-fill'></i></a>" +
+            $"<a class='text-warning me-2' href='{Url.Action("Edit", controller, new { id = m.Id })}' title='Editar'><i class='bi bi-pencil-fill'></i></a>" +
+            $"<a class='text-danger' href='{Url.Action("Delete", controller, new { id = m.Id })}' title='Eliminar' onclick=\"return confirm('¿Realmente desea eliminar este registro?');\"><i class='bi bi-trash3-fill'></i></a>"
+            ).Titled("").Encoded(false);
+        })
+        .Empty("No hay datos en la tabla.")
+        .Filterable()
+        .Sortable()
+        .Pageable(p =>
+        {
+            p.PageSizes = new Dictionary<Int32, String> { { 0, "Todos" }, { 5, "5" }, { 10, "10" }, { 15, "15" }, { 20, "20" } };
+            p.ShowPageSizes = true;
+            p.RowsPerPage = 15;
+        })
+        )
+</div>

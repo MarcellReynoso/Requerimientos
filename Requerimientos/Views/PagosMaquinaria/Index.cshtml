@@ -1,0 +1,94 @@
+﻿@using NonFactors.Mvc.Grid
+@model IEnumerable<Requerimientos.Models.ViewModels.PagoMaquinariaViewModel>
+
+@{
+    ViewData["Title"] = "Pagos maquinaria";
+    var controller = (string)ViewContext.RouteData.Values["controller"]!;
+}
+
+<h1 class="h1" style="font-size: 1.5rem;">@ViewData["Title"]</h1>
+
+@* Seleccionar pestaña *@
+@await Html.PartialAsync("_Tabs")
+
+<!-- Filtros arriba (opcional, porque el grid ya filtra por columna) -->
+<div class="p-2 mb-3">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-12 col-md-4">
+            <label class="form-label mb-1">Clase del vehiculo</label>
+            <select class="form-select" name="claseId" asp-items="ViewBag.ClasesPagables">
+                <option value="">Todas</option>
+            </select>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <label class="form-label mb-1">Desde</label>
+            <input type="date" class="form-control" name="desde" value="@Context.Request.Query["desde"]" />
+        </div>
+
+        <div class="col-12 col-md-3">
+            <label class="form-label mb-1">Hasta</label>
+            <input type="date" class="form-control" name="hasta" value="@Context.Request.Query["hasta"]" />
+        </div>
+
+        <div class="col-12 col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-funnel"></i> Filtrar
+            </button>
+            <a asp-action="Index" class="btn btn-warning w-100" title="Limpiar filtros">
+                <i class="bi bi-x-circle"></i> Limpiar
+            </a>
+        </div>
+    </form>
+</div>
+
+<div class="tabla-ui pt-2">
+    @(
+        Html.Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(m => m.Chofer).Titled("Chofer");
+            columns.Add(m => m.Fecha).Titled("Fecha").Formatted("{0:dd/MM/yyyy}");
+            columns.Add(m => m.Pertenece).Titled("Pertenece");
+            columns.Add(m => m.Proveedor).Titled("Proveedor");
+            @* columns.Add(m => m.Clase).Titled("Clase"); *@
+            columns.Add(m => m.HorometroTotal1).Titled("Horometro total").Formatted("{0:N2}");
+            columns.Add(m => m.Observaciones).Titled("Observaciones");
+            @* columns.Add(m => m.HorasMin1).Titled("Horas mín. 1").Formatted("{0:N2}"); *@
+            columns.Add(m => m.HorasPagar1).Titled("Horas trabajadas minimas").Formatted("{0:N2}");
+            columns.Add(m => m.PrecioHora1).Titled("Precio x hora").Formatted("S/ {0:N2}");
+            columns.Add(m => m.TotalPagar1).Titled("Total a pagar").Formatted("S/ {0:N2}");
+            @* columns.Add(m => m.HorometroTotal2)
+            .Titled("Hor. total 2")
+            .RenderedAs(m => m.TieneHorometro2 ? m.HorometroTotal2.ToString("N2") : "-")
+            .Encoded(false);
+            columns.Add(m => m.TieneHorometro2 ? m.HorasMin2 : 0m)
+            .Titled("Horas mín. 2").Formatted("{0:N2}");
+            columns.Add(m => m.TieneHorometro2 ? m.HorasPagar2 : 0m)
+            .Titled("Horas pagar 2").Formatted("{0:N2}");
+            columns.Add(m => m.TieneHorometro2 ? m.PrecioHora2 : 0m)
+            .Titled("Precio/h 2").Formatted("S/ {0:N2}");
+            columns.Add(m => m.TieneHorometro2 ? m.TotalPagar2 : 0m)
+            .Titled("Total pagar 2").Formatted("S/ {0:N2}");
+            columns.Add(m => m.TotalGeneral).Titled("Total general").Formatted("S/ {0:N2}"); *@
+
+            @* Botones de accion *@
+            columns.Add(m =>
+            $"<a class='text-info me-2' href='{Url.Action("Details", "Movimientos", new { id = m.MovimientoId })}' title='Ver movimiento'><i class='bi bi-eye-fill'></i></a>" +
+            $"<a class='text-warning' href='{Url.Action("Edit", "Movimientos", new { id = m.MovimientoId })}' title='Editar movimiento'><i class='bi bi-pencil-fill'></i></a>"
+            )
+            .Titled("")
+            .Encoded(false)
+            .Css("text-nowrap");
+        })
+        .Empty("No hay datos en la tabla.")
+        .Filterable()
+        .Sortable()
+        .Pageable(p =>
+        {
+            p.PageSizes = new Dictionary<int, string> { { 0, "Todos" }, { 5, "5" }, { 10, "10" }, { 15, "15" }, { 20, "20" } };
+            p.ShowPageSizes = true;
+            p.RowsPerPage = 15;
+        })
+        )
+</div>

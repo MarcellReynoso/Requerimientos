@@ -1,0 +1,179 @@
+﻿@model Requerimientos.Models.Compra
+
+@{
+    ViewData["Title"] = "Crear compra";
+    var timeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
+    var fecha = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+}
+
+<div class="px-0 px-md-3">
+    <!-- Centro -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8 col-xl-7">
+            <h2 class="mb-3">Nueva compra</h2>
+            <div class="card border-0">
+                <div class="card-body p-0">
+                    <form asp-action="Create" method="post" id="frmCompra" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger d-none"
+                             role="alert"></div>
+
+                        <!-- Bloque: Datos de la compra -->
+                        <div class="border rounded-4 p-3 bg-white mb-3">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                                    <i class="bi bi-receipt" style="font-size:1.2rem;"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Datos de la compra</div>
+                                    <div class="text-muted small">Fecha, producto y cantidades</div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="Nombre" class="form-label mb-1">
+                                        Nombre producto <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Nombre" class="form-control" placeholder="Ej: GRAPAS PARA PARED 8MM" />
+                                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="Fecha" class="form-label mb-1"></label>
+                                    <input asp-for="Fecha"
+                                           class="form-control"
+                                           type="datetime-local"
+                                           value="@fecha.ToString("yyyy-MM-ddTHH:mm")" />
+                                    <span asp-validation-for="Fecha" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-6 col-md-4">
+                                    <label asp-for="Cantidad" class="form-label mb-1">
+                                        Cantidad <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Cantidad" class="form-control" value="1" inputmode="decimal" />
+                                    <span asp-validation-for="Cantidad" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-6 col-md-4">
+                                    <label asp-for="Unidad" class="form-label mb-1">Unidad</label>
+                                    <input asp-for="Unidad" class="form-control" placeholder="UNI, KG, GLN..." />
+                                    <span asp-validation-for="Unidad" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="Comprador" class="form-label mb-1">Quién compró</label>
+                                    <input asp-for="Comprador" class="form-control" placeholder="Ej: ERNESTO ACUACHI" />
+                                    <span asp-validation-for="Comprador" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bloque: Proveedor, pago y documento -->
+                        <div class="border rounded-4 p-3 bg-white">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:38px;height:38px;background:rgba(25,135,84,.12);">
+                                    <i class="bi bi-credit-card-2-front" style="font-size:1.2rem;"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Proveedor y montos</div>
+                                    <div class="text-muted small">Pago, documento y evidencia</div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="ProveedorId" class="form-label mb-1">
+                                        Proveedor <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="ProveedorId" class="form-select" asp-items="ViewBag.ProveedorId">
+                                        <option selected disabled value="">Seleccione un proveedor</option>
+                                    </select>
+                                    <span asp-validation-for="ProveedorId" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="CondicionPago" class="form-label mb-1">
+                                        Condición de pago <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="CondicionPago" class="form-select">
+                                        <option selected disabled value="">Seleccione una condición</option>
+                                        <option>Efectivo</option>
+                                        <option>Yape</option>
+                                        <option>Transferencia</option>
+                                    </select>
+                                    <span asp-validation-for="CondicionPago" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12">
+                                    <label asp-for="NroDocumento" class="form-label mb-1">Nro documento</label>
+                                    <input asp-for="NroDocumento" class="form-control"
+                                           placeholder="F001-00010848 / Nota / Boleta..." />
+                                    <span asp-validation-for="NroDocumento" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="Monto" class="form-label mb-1">Monto (gasto)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">S/</span>
+                                        <input asp-for="Monto" class="form-control" inputmode="decimal" />
+                                    </div>
+                                    <span asp-validation-for="Monto" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="Ingreso" class="form-label mb-1">Ingreso caja</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">S/</span>
+                                        <input asp-for="Ingreso" class="form-control" inputmode="decimal" />
+                                    </div>
+                                    <span asp-validation-for="Ingreso" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-4 mb-4">
+                                    <label asp-for="Evidencia" class="form-label mb-1">Evidencia pago</label>
+                                    <input asp-for="Evidencia" class="form-control" placeholder="Nombre archivo / URL" />
+                                    <span asp-validation-for="Evidencia" class="text-danger small"></span>
+                                </div>
+
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a asp-action="Index" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i> Regresar
+                                </a>
+                                <button type="submit" form="frmCompra" class="btn btn-primary">
+                                    <i class="bi bi-floppy"></i> Guardar
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <!-- Acciones (mobile) -->
+                        <div class="d-flex d-md-none gap-2 mt-4">
+                            <a asp-action="Index" class="btn btn-secondary w-50">
+                                <i class="bi bi-arrow-left"></i> Regresar
+                            </a>
+                            <button type="submit" class="btn btn-primary w-50">
+                                <i class="bi bi-floppy"></i> Guardar
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

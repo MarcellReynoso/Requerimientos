@@ -1,0 +1,153 @@
+﻿@model Requerimientos.Models.Movimiento
+
+@{
+    ViewData["Title"] = "Detalles del movimiento";
+}
+
+<div class="container-fluid px-0 px-md-3">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">@ViewData["Title"]</h2>
+            <small class="text-muted">ID: @Model.Id</small>
+        </div>
+
+        <!-- Acciones (desktop) -->
+        <div class="d-none d-md-flex gap-2">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i> Editar
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0">
+        <div class="card-body p-0">
+            <div class="border rounded-4 p-3 bg-white">
+
+                <!-- Título interno -->
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center"
+                         style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                        <i class="bi bi-clipboard-data" style="font-size:1.2rem;"></i>
+                    </div>
+                    <div>
+                        <div class="fw-semibold">Resumen</div>
+                        <div class="text-muted small">Datos registrados</div>
+                    </div>
+                </div>
+
+                <!-- Contenido -->
+                <dl class="row mb-0">
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-calendar-event me-2"></i>Fecha
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        @Model.Fecha.ToString("dd/MM/yyyy")
+                    </dd>
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-truck-front me-2"></i>Vehículo
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        @Model.Vehiculo?.Placa <span class="text-muted">(@Model.Vehiculo?.Clase?.Nombre)</span>
+                    </dd>
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-diagram-3 me-2"></i>Pertenece
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        @Model.Pertenece?.Nombre
+                    </dd>
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-building me-2"></i>Proveedor
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        @Model.Proveedor?.Nombre
+                    </dd>
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-clock me-2"></i>Hora salida
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        @Model.HoraSalida?.ToString("HH:mm")
+                    </dd>
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-clock-history me-2"></i>Hora ingreso
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        @Model.HoraIngreso?.ToString("HH:mm")
+                    </dd>
+
+                    <!-- Calculado -->
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-hourglass-split me-2"></i>Total minutos
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        <span class="badge rounded-pill text-bg-primary">@Model.TotalMinutos</span>
+                    </dd>
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-chat-left-text me-2"></i>Motivo
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        @(!string.IsNullOrWhiteSpace(Model.Motivo) ? Model.Motivo : "-")
+                    </dd>
+
+                    <!-- Calculados -->
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-speedometer2 me-2"></i>Horómetro total
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        <span class="badge rounded-pill text-bg-success">@Model.HorometroTotal</span>
+                    </dd>
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-speedometer2 me-2"></i>Horómetro total 2
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        <span class="badge rounded-pill text-bg-success">@Model.HorometroTotal2</span>
+                    </dd>
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-arrow-repeat me-2"></i>Vueltas volq
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        @((Model.VueltasVolq ?? 0))
+                    </dd>
+
+                    <!-- Calculado -->
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-box-seam me-2"></i>Total M3 desm
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-2">
+                        <span class="badge rounded-pill text-bg-warning">@Model.TotalM3Desm</span>
+                    </dd>
+
+                    <dt class="col-5 col-md-4 text-muted fw-normal">
+                        <i class="bi bi-pencil-square me-2"></i>Observaciones
+                    </dt>
+                    <dd class="col-7 col-md-8 mb-0">
+                        @(!string.IsNullOrWhiteSpace(Model.Observaciones) ? Model.Observaciones : "-")
+                    </dd>
+
+                </dl>
+            </div>
+
+            <!-- Acciones (mobile) -->
+            <div class="d-flex d-md-none gap-2 mt-4">
+                <a asp-action="Index" class="btn btn-secondary w-50">
+                    <i class="bi bi-arrow-left"></i> Regresar
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary w-50">
+                    <i class="bi bi-pencil-square"></i> Editar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,149 @@
+﻿@model Requerimientos.Models.Requerimiento
+
+@{
+    ViewData["Title"] = "Detalle de requerimiento";
+    var timeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
+    var fecha = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+}
+
+<div class="px-3 pt-0 pt-md-3">
+
+    <!-- Centro -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8 col-xl-7">
+            <h2 class="mb-3">Nuevo requerimiento</h2>
+            <div class="card border-0">
+                <div class="card-body p-0">
+                    <form asp-action="View" method="post" id="frmRequerimiento" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger d-none"
+                             role="alert"></div>
+
+                        <!-- Bloque: Datos generales -->
+                        <div class="border rounded-4 p-3 bg-white mb-3">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                                    <i class="bi bi-clipboard-check" style="font-size:1.2rem;"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Datos generales</div>
+                                    <div class="text-muted small">Número, fecha y responsables</div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="Numero" class="form-label mb-1">
+                                        Número <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Numero" class="form-control" placeholder="Ej: R-001" required />
+                                    <span asp-validation-for="Numero" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="Fecha" class="form-label mb-1"></label>
+                                    <input asp-for="Fecha"
+                                           class="form-control"
+                                           type="datetime-local"
+                                           value="@fecha.ToString("yyyy-MM-ddTHH:mm")" />
+                                    <span asp-validation-for="Fecha" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="Area" class="form-label mb-1"></label>
+                                    <input asp-for="Area" class="form-control"/>
+                                    <span asp-validation-for="Area" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="Solicitante" class="form-label mb-1"></label>
+                                    <input asp-for="Solicitante" class="form-control"/>
+                                    <span asp-validation-for="Solicitante" class="text-danger small"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Bloque: Detalle del requerimiento -->
+                        <div class="border rounded-4 p-3 bg-white">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:38px;height:38px;background:rgba(25,135,84,.12);">
+                                    <i class="bi bi-box-seam" style="font-size:1.2rem;"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Detalle del requerimiento</div>
+                                    <div class="text-muted small">Descripción, unidad y cantidades</div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label asp-for="Descripcion" class="form-label mb-1"></label>
+                                    <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="Unidad" class="form-label mb-1">
+                                        Unidad <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Unidad" class="form-control" required />
+                                    <span asp-validation-for="Unidad" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-6 col-md-4">
+                                    <label asp-for="Cantidad" class="form-label mb-1"></label>
+                                    <input asp-for="Cantidad" class="form-control" value="1" inputmode="decimal" />
+                                    <span asp-validation-for="Cantidad" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-6 col-md-4">
+                                    <label asp-for="Real" class="form-label mb-1"></label>
+                                    <input asp-for="Real" class="form-control" inputmode="decimal" placeholder="?"/>
+                                    <span asp-validation-for="Real" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12">
+                                    <label asp-for="Detalle" class="form-label mb-1"></label>
+                                    <textarea asp-for="Detalle" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="Detalle" class="text-danger small"></span>
+                                </div>
+
+                                <div class="d-flex justify-content-between gap-2">
+                                    <a asp-action="Index" class="btn btn-secondary">
+                                        <i class="bi bi-arrow-left"></i> Regresar
+                                    </a>
+                                    <button type="submit" form="frmRequerimiento" class="btn btn-primary">
+                                        <i class="bi bi-floppy"></i> Guardar
+                                    </button>
+                                </div>
+                                    
+                            </div>
+                        </div>
+
+                        <!-- Acciones (mobile) -->
+                        <div class="d-flex d-md-none gap-2 mt-4">
+                            <a asp-action="Index" class="btn btn-secondary w-50">
+                                <i class="bi bi-arrow-left"></i> Regresar
+                            </a>
+                            <button type="submit" class="btn btn-primary w-50">
+                                <i class="bi bi-floppy"></i> Guardar
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

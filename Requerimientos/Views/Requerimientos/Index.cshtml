@@ -1,0 +1,63 @@
+﻿@using NonFactors.Mvc.Grid
+@model IEnumerable<Requerimiento>
+
+@{
+    ViewData["Title"] = "Requerimientos";
+}
+
+<h1 class="h1" style="font-size: 1.5rem;">Requerimientos</h1>
+
+@* Seleccionar pestaña *@
+@await Html.PartialAsync("_Tabs")
+
+@* Botón crear *@
+<div class="col-12">
+    <a asp-controller="Requerimientos" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i>
+        Nuevo requerimiento
+    </a>
+</div>
+
+@* Tabla Requerimientos *@
+<div class="tabla-ui pt-4">
+    @(Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(model => model.Numero).Titled("Numero");
+            columns.Add(model => model.Fecha).Titled("Fecha").Formatted("{0:d}");
+            columns.Add(model => model.Descripcion).Titled("Descripcion");
+            columns.Add(model => model.Unidad).Titled("Unidad");
+            columns.Add(model => model.Cantidad).Titled("Cantidad");
+            columns.Add(model => model.Area).Titled("Area");
+            columns.Add(model => model.Solicitante).Titled("Solicitante");
+            columns.Add(model => model.Detalle).Titled("Detalle");
+            columns.Add(model => model.Real).Titled("Real");
+            columns
+            .Add()
+            .RenderedAs(model =>
+            {
+                var diferencia = (model.Real ?? 0) - model.Cantidad;
+                return diferencia;
+            })
+            .Titled("Diferencia");
+            columns
+            .Add()
+            .RenderedAs(model =>
+            {
+                var diferencia = (model.Real ?? 0) - model.Cantidad;
+                return diferencia == 0 ? "Correcto" : diferencia < 0 ? "Falta" : "Demas";
+            })
+            .Titled("Resultado");
+        })
+        .Empty("No hay registros.")
+        .Filterable()
+        .Sortable()
+        .Pageable(p =>
+        {
+            p.PageSizes = new Dictionary<Int32, String> { { 0, "Todos" }, { 5, "5" }, { 10, "10" }, { 15, "15" }, { 20, "20" } };
+            p.ShowPageSizes = true;
+            p.RowsPerPage = 15;
+        })
+        )
+</div>

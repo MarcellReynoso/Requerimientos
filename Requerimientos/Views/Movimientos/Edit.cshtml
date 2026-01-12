@@ -1,0 +1,225 @@
+﻿@model Requerimientos.Models.Movimiento
+
+@{
+    ViewData["Title"] = "Editar movimiento";
+}
+
+<div class="container-fluid px-0 px-md-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Editar movimiento</h2>
+            <small class="text-muted">Actualice la información</small>
+        </div>
+
+        <div class="d-none d-md-flex gap-2">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </a>
+            <button type="submit" form="frmMovEdit" class="btn btn-primary">
+                <i class="bi bi-floppy"></i> Guardar
+            </button>
+        </div>
+    </div>
+
+    <div class="card border-0">
+        <div class="card-body p-0">
+            <form asp-action="Edit" method="post" id="frmMovEdit" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <!-- Bloque: Datos generales (MISMO ICONO QUE CREATE) -->
+                <div class="border rounded-4 p-3 bg-white mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                            <i class="bi bi-clipboard-data" style="font-size:1.2rem;"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold">Datos generales</div>
+                            <div class="text-muted small">Fecha, vehículo, chofer, proveedor</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-4">
+                            <label asp-for="Fecha" class="form-label mb-1">
+                                Fecha <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Fecha" type="date" class="form-control" />
+                            <span asp-validation-for="Fecha" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label asp-for="HoraSalida" class="form-label mb-1">
+                                Hora salida <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="HoraSalida" type="time" class="form-control" />
+                            <span asp-validation-for="HoraSalida" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label asp-for="HoraIngreso" class="form-label mb-1">
+                                Hora ingreso <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="HoraIngreso" type="time" class="form-control" />
+                            <span asp-validation-for="HoraIngreso" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="VehiculoId" class="form-label mb-1">
+                                Vehículo <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="VehiculoId" asp-items="ViewBag.Vehiculos" class="form-select"></select>
+                            <span asp-validation-for="VehiculoId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="PerteneceId" class="form-label mb-1">
+                                Pertenece <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="PerteneceId" asp-items="ViewBag.Perteneces" class="form-select"></select>
+                            <span asp-validation-for="PerteneceId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="ProveedorId" class="form-label mb-1">
+                                Proveedor <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="ProveedorId" asp-items="ViewBag.Proveedores" class="form-select"></select>
+                            <span asp-validation-for="ProveedorId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Motivo" class="form-label mb-1">Motivo</label>
+                            <textarea asp-for="Motivo" class="form-control" rows="2" autocomplete="off"></textarea>
+                            <span asp-validation-for="Motivo" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Calculados (solo lectura) -->
+                        <div class="col-12">
+                            <div class="border rounded-4 p-2 bg-light d-flex flex-wrap gap-3 align-items-center">
+                                <div>
+                                    <div class="text-muted small">Total minutos</div>
+                                    <div class="fw-semibold">@Model.TotalMinutos</div>
+                                </div>
+                            </div>
+                            <div class="form-text">Estos valores se recalculan al guardar.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque: Horómetros (MISMO ICONO QUE CREATE) -->
+                <div class="border rounded-4 p-3 bg-white mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width:38px;height:38px;background:rgba(25,135,84,.12);">
+                            <i class="bi bi-speedometer2" style="font-size:1.2rem;"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold">Horómetros</div>
+                            <div class="text-muted small">Se calculan totales al guardar</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-3">
+                            <label asp-for="HorometroInicio" class="form-label mb-1">Horómetro inicio</label>
+                            <input asp-for="HorometroInicio" class="form-control" inputmode="decimal" />
+                            <span asp-validation-for="HorometroInicio" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <label asp-for="HorometroFinal" class="form-label mb-1">Horómetro final</label>
+                            <input asp-for="HorometroFinal" class="form-control" inputmode="decimal" />
+                            <span asp-validation-for="HorometroFinal" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <label asp-for="HorometroInicio2" class="form-label mb-1">Horómetro inicio 2</label>
+                            <input asp-for="HorometroInicio2" class="form-control" inputmode="decimal" />
+                            <span asp-validation-for="HorometroInicio2" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <label asp-for="HorometroFinal2" class="form-label mb-1">Horómetro final 2</label>
+                            <input asp-for="HorometroFinal2" class="form-control" inputmode="decimal" />
+                            <span asp-validation-for="HorometroFinal2" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Calculados horómetros (solo lectura) -->
+                        <div class="col-12">
+                            <div class="border rounded-4 p-2 bg-light d-flex flex-wrap gap-4">
+                                <div>
+                                    <div class="text-muted small">Horómetro total</div>
+                                    <div class="fw-semibold">@Model.HorometroTotal</div>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Horómetro total 2</div>
+                                    <div class="fw-semibold">@Model.HorometroTotal2</div>
+                                </div>
+                            </div>
+                            <div class="form-text">Estos totales se recalculan al guardar.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque: Volquetes (MISMO ICONO QUE CREATE) -->
+                <div class="border rounded-4 p-3 bg-white mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center"
+                             style="width:38px;height:38px;background:rgba(255,193,7,.18);">
+                            <i class="bi bi-truck" style="font-size:1.2rem;"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold">Volquete (si aplica)</div>
+                            <div class="text-muted small">M3 se calcula: Vueltas * 15</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label asp-for="VueltasVolq" class="form-label mb-1">Vueltas volq</label>
+                            <input asp-for="VueltasVolq" class="form-control" inputmode="numeric" />
+                            <span asp-validation-for="VueltasVolq" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Observaciones" class="form-label mb-1">Observaciones</label>
+                            <input asp-for="Observaciones" class="form-control" autocomplete="off" />
+                            <span asp-validation-for="Observaciones" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Calculado M3 -->
+                        <div class="col-12">
+                            <div class="border rounded-4 p-2 bg-light d-flex flex-wrap gap-4">
+                                <div>
+                                    <div class="text-muted small">Total M3 desm</div>
+                                    <div class="fw-semibold">@Model.TotalM3Desm</div>
+                                </div>
+                            </div>
+                            <div class="form-text">Se recalcula al guardar.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones (mobile) -->
+                <div class="d-flex d-md-none gap-2 mt-4">
+                    <a asp-action="Index" class="btn btn-secondary w-50">
+                        <i class="bi bi-arrow-left"></i> Regresar
+                    </a>
+                    <button type="submit" class="btn btn-primary w-50">
+                        <i class="bi bi-floppy"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
