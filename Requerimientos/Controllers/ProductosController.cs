@@ -21,42 +21,40 @@ namespace Requerimientos.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var data = await _context.Set<Producto>()
-                .Include(p => p.Categoria)
-                .Include(p => p.Pertenece)
-                .Include(p => p.Unidad)
-                .Select(p => new
+            var data = await (
+                from p in _context.Productos.AsNoTracking()
+                    .Include(x => x.Categoria)
+                    .Include(x => x.Pertenece)
+                    .Include(x => x.Unidad)
+                join k in _context.Kardex.AsNoTracking()
+                    on p.Id equals k.ProductoId into kj
+                let existencia = kj.Sum(x => (decimal?)x.Cantidad) ?? 0m
+                select new InventarioViewModel
                 {
-                    p,
-                    Existencia = _context.Set<Kardex>()
-                        .Where(k => k.ProductoId == p.Id)
-                        .Sum(k => (decimal?)k.Cantidad) ?? 0m
-                })
-                .Select(x => new InventarioViewModel
-                {
-                    ProductoId = x.p.Id,
-                    Codigo = x.p.Codigo,
-                    Producto = x.p.Nombre,
-                    Categoria = x.p.Categoria!.Nombre,
-                    Concatenar = x.p.Categoria!.Prefijo,
-                    Almacen = x.p.Pertenece!.Nombre,
-                    Unidad = x.p.Unidad!.Simbolo,
-                    StockMinimo = x.p.StockMinimo,
-                    ExistenciaActual = x.Existencia,
-                    Proviene = x.p.Proviene,
-                    Condicion = x.p.Condicion,
-                    NroRequerimiento = x.p.NroRequerimiento,
-                    AreaRequerimiento = x.p.AreaRequerimiento,
-                    Status = x.Existencia == 0m ? "Agotado"
-                       : x.Existencia < x.p.StockMinimo ? "Menor al minimo"
-                       : "Ok"
-                })
-                .OrderBy(p => p.Codigo)
-                .AsNoTracking()
-                .ToListAsync();
+                    ProductoId = p.Id,
+                    Codigo = p.Codigo,
+                    Producto = p.Nombre,
+                    Categoria = p.Categoria != null ? p.Categoria.Nombre : "",
+                    Concatenar = p.Categoria != null ? p.Categoria.Prefijo : "",
+                    Almacen = p.Pertenece != null ? p.Pertenece.Nombre : "",
+                    Unidad = p.Unidad != null ? p.Unidad.Simbolo : "",
+                    StockMinimo = p.StockMinimo,
+                    Proviene = p.Proviene,
+                    Condicion = p.Condicion,
+                    NroRequerimiento = p.NroRequerimiento,
+                    AreaRequerimiento = p.AreaRequerimiento,
+
+                    ExistenciaActual = existencia,
+                    Status = existencia == 0m
+                        ? "AGOTADO"
+                        : (existencia < p.StockMinimo ? "MENOR AL MINIMO" : "OK")
+                }
+            ).OrderBy(x => x.Codigo).ToListAsync();
 
             return View(data);
         }
+
+
 
         [HttpGet]
         public async Task<IActionResult> Create()

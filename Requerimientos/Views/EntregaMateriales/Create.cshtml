@@ -1,0 +1,164 @@
+﻿@model Requerimientos.Models.EntregaMaterial
+
+@{
+    ViewData["Title"] = "Nueva entrega de materiales";
+    var timeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
+    var fecha = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+}
+
+<div class="px-0 px-md-3 py-md-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8 col-xl-7">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="mb-0">Entrega de materiales</h2>
+                    <small class="text-muted">Registre una entrega</small>
+                </div>
+            </div>
+
+            <div class="card border-0">
+                <div class="card-body p-0">
+
+                    <form asp-action="Create" method="post" id="frmEntregaMaterialCreate" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger d-none"
+                             role="alert"></div>
+
+                        <div class="border rounded-4 p-3 bg-white">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                                    <i class="bi bi-box-arrow-up-right" style="font-size:1.2rem;"></i>
+                                </div>
+                                <div class="fw-semibold">Datos de la entrega</div>
+                            </div>
+
+                            <div class="row g-3">
+
+                                <!-- Fecha -->
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="Fecha" class="form-label mb-1">
+                                        Fecha <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Fecha" type="date" class="form-control"
+                                           value="@fecha.ToString("yyyy-MM-dd")" />
+                                    <span asp-validation-for="Fecha" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Producto -->
+                                <div class="col-12 col-md-8">
+                                    <label asp-for="ProductoId" class="form-label mb-1">
+                                        Producto <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="ProductoId" asp-items="ViewBag.Productos" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="ProductoId" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Cantidad -->
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="CantidadEntregada" class="form-label mb-1">
+                                        Cantidad entregada <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="CantidadEntregada" class="form-control" type="number" step="0.01" inputmode="decimal" />
+                                    <span asp-validation-for="CantidadEntregada" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Material -->
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="Material" class="form-label mb-1">Material</label>
+                                    <input asp-for="Material" class="form-control" autocomplete="off" placeholder="Ej: EPP" />
+                                    <span asp-validation-for="Material" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Retorno -->
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="Retorno" class="form-label mb-1">Retorno</label>
+                                    <input asp-for="Retorno" class="form-control" autocomplete="off" placeholder="Ej: SIN RETORNO" />
+                                    <span asp-validation-for="Retorno" class="text-danger small"></span>
+                                </div>
+
+                                <!-- A quién se entrega -->
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="AQuienSeEntregaId" class="form-label mb-1">
+                                        A quién se entrega <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="AQuienSeEntregaId" asp-items="ViewBag.Trabajadores" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="AQuienSeEntregaId" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Responsable -->
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="ResponsableId" class="form-label mb-1">
+                                        Responsable <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="ResponsableId" asp-items="ViewBag.Trabajadores" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="ResponsableId" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Hora salida -->
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="HoraSalida" class="form-label mb-1">Hora salida</label>
+                                    <input asp-for="HoraSalida" type="time" class="form-control" />
+                                    <span asp-validation-for="HoraSalida" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Hora ingreso -->
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="HoraIngreso" class="form-label mb-1">Hora ingreso</label>
+                                    <input asp-for="HoraIngreso" type="time" class="form-control" />
+                                    <span asp-validation-for="HoraIngreso" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Fecha retorno -->
+                                <div class="col-12 col-md-4">
+                                    <label asp-for="FechaRetorno" class="form-label mb-1">Fecha retorno</label>
+                                    <input asp-for="FechaRetorno" type="date" class="form-control" />
+                                    <span asp-validation-for="FechaRetorno" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Acciones (desktop) -->
+                                <div class="d-none d-md-flex justify-content-between gap-2">
+                                    <a asp-action="Index" class="btn btn-secondary">
+                                        <i class="bi bi-arrow-left"></i> Regresar
+                                    </a>
+                                    <button type="submit" form="frmEntregaMaterialCreate" class="btn btn-primary">
+                                        <i class="bi bi-floppy"></i> Guardar
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Acciones (mobile) -->
+                        <div class="d-flex d-md-none gap-2 mt-4">
+                            <a asp-action="Index" class="btn btn-secondary w-50">
+                                <i class="bi bi-arrow-left"></i> Regresar
+                            </a>
+                            <button type="submit" class="btn btn-primary w-50">
+                                <i class="bi bi-floppy"></i> Guardar
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

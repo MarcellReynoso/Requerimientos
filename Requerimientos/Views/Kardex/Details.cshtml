@@ -1,0 +1,98 @@
+﻿@model Requerimientos.Models.ViewModels.KardexViewModel
+
+@{
+    ViewData["Title"] = "Detalle de Kardex";
+}
+
+<div class="container-fluid px-0 px-md-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Kardex</h2>
+            <small class="text-muted">Detalle del movimiento</small>
+        </div>
+        <div class="d-none d-md-flex gap-2">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                <i class="bi bi-pencil-fill"></i> Editar
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <!-- ================= PRODUCTO ================= -->
+            <dl class="row mb-0">
+
+                <dt class="col-sm-4 text-muted">Código</dt>
+                <dd class="col-sm-8 fw-semibold">@Model.Codigo</dd>
+
+                <dt class="col-sm-4 text-muted">Producto</dt>
+                <dd class="col-sm-8">@Model.Producto</dd>
+
+                <dt class="col-sm-4 text-muted">Existencia actual</dt>
+                <dd class="col-sm-8 fw-semibold">
+                    @Model.ExistenciaActual.ToString("0.##")
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Proviene</dt>
+                <dd class="col-sm-8">@Model.Proviene</dd>
+            </dl>
+
+            <hr class="my-4" />
+
+            <!-- ================= KARDEX ================= -->
+            <dl class="row mb-0">
+
+                <dt class="col-sm-4 text-muted">Fecha</dt>
+                <dd class="col-sm-8">@Model.Fecha.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-4 text-muted">Cantidad</dt>
+                <dd class="col-sm-8">@Model.Cantidad.ToString("0")</dd>
+
+                <dt class="col-sm-4 text-muted">Descripción</dt>
+                <dd class="col-sm-8">@Model.Descripcion</dd>
+
+                <dt class="col-sm-4 text-muted">Quién entrega</dt>
+                <dd class="col-sm-8">@Model.QuienEntrega</dd>
+
+                <dt class="col-sm-4 text-muted">Quién recibe</dt>
+                <dd class="col-sm-8">@Model.QuienRecibe</dd>
+
+                <dt class="col-sm-4 text-muted">Precio unitario</dt>
+                <dd class="col-sm-8">
+                    @(Model.PrecioUnitario.HasValue
+                                        ? Model.PrecioUnitario.Value.ToString("S/ 0.00")
+                                        : "-")
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Precio venta</dt>
+                <dd class="col-sm-8">
+                    @(Model.PrecioVenta.HasValue
+                                        ? Model.PrecioVenta.Value.ToString("S/ 0.00")
+                                        : "-")
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Documento ingreso</dt>
+                <dd class="col-sm-8">@Model.DocumentoIngreso</dd>
+
+                <dt class="col-sm-4 text-muted">Documento salida</dt>
+                <dd class="col-sm-8">@Model.DocumentoSalida</dd>
+
+            </dl>
+
+            <!-- Acciones mobile -->
+            <div class="d-flex d-md-none gap-2 mt-3">
+                <a asp-action="Index" class="btn btn-secondary w-50">
+                    <i class="bi bi-arrow-left"></i> Regresar
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning w-50">
+                    <i class="bi bi-pencil-fill"></i> Editar
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

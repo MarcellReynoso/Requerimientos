@@ -1,0 +1,175 @@
+﻿@model Requerimientos.Models.Kardex
+
+@{
+    ViewData["Title"] = "Nuevo registro de Kardex";
+    var timeZone = TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
+    var fecha = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+}
+
+<div class="px-0 px-md-3 py-md-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-11 col-lg-8 col-xl-7">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 class="mb-0">Kardex</h2>
+                    <small class="text-muted">Edite el registro</small>
+                </div>
+            </div>
+
+            <div class="card border-0">
+                <div class="card-body p-0">
+
+                    <form asp-action="Edit" method="post" id="frmKardexEdit" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger d-none"
+                             role="alert"></div>
+
+                        <div class="border rounded-4 p-3 bg-white">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:38px;height:38px;background:rgba(13,110,253,.12);">
+                                    <i class="bi bi-clipboard-check" style="font-size:1.2rem;"></i>
+                                </div>
+                                <div class="fw-semibold">Datos del movimiento</div>
+                            </div>
+
+                            <div class="row g-3">
+
+                                <!-- Producto -->
+                                <div class="col-12">
+                                    <label asp-for="ProductoId" class="form-label mb-1">
+                                        Producto <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="ProductoId" asp-items="ViewBag.Productos" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="ProductoId" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Fecha -->
+                                <div class="col-12 col-md-3">
+                                    <label asp-for="Fecha" class="form-label mb-1">
+                                        Fecha <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Fecha"
+                                           type="date"
+                                           class="form-control"
+                                           value="@fecha.ToString("yyyy-MM-dd")" />
+                                    <span asp-validation-for="Fecha" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Cantidad -->
+                                <div class="col-12 col-md-3">
+                                    <label asp-for="Cantidad" class="form-label mb-1">
+                                        Cantidad <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Cantidad" class="form-control" type="number" step="any" autocomplete="off" />
+                                    <span asp-validation-for="Cantidad" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Precio unitario -->
+                                <div class="col-12 col-md-3">
+                                    <label asp-for="PrecioUnitario" class="form-label mb-1">Precio unitario</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">S/</span>
+                                        <input asp-for="PrecioUnitario" class="form-control" inputmode="decimal" type="number" step="any" autocomplete="off" />
+                                    </div>
+                                    <span asp-validation-for="PrecioUnitario" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Precio venta  -->
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label mb-1">Precio venta</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">S/</span>
+                                        <input class="form-control" id="PrecioVentaUI" value="" readonly />
+                                    </div>
+                                </div>
+
+                                <!-- Descripción -->
+                                <div class="col-12">
+                                    <label asp-for="Descripcion" class="form-label mb-1">
+                                        Descripción <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea 
+                                        asp-for="Descripcion" 
+                                        class="form-control" 
+                                        rows="3" 
+                                        autocomplete="off"></textarea>
+                                    <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Quién entrega / recibe -->
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="QuienEntregaId" class="form-label mb-1">
+                                        Quién entrega <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="QuienEntregaId" asp-items="ViewBag.Trabajadores" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="QuienEntregaId" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="QuienRecibeId" class="form-label mb-1">
+                                        Quién recibe <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="QuienRecibeId" asp-items="ViewBag.Trabajadores" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="QuienRecibeId" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Documentos -->
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="DocumentoIngreso" class="form-label mb-1">Documento ingreso</label>
+                                    <input asp-for="DocumentoIngreso" class="form-control" autocomplete="off"/>
+                                    <span asp-validation-for="DocumentoIngreso" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="DocumentoSalida" class="form-label mb-1">Documento salida</label>
+                                    <input asp-for="DocumentoSalida" class="form-control" autocomplete="off"/>
+                                    <span asp-validation-for="DocumentoSalida" class="text-danger small"></span>
+                                </div>
+
+                                <!-- Acciones (desktop) -->
+                                <div class="d-none d-md-flex justify-content-between gap-2">
+                                    <a asp-action="Index" class="btn btn-secondary">
+                                        <i class="bi bi-arrow-left"></i> Regresar
+                                    </a>
+                                    <button type="submit" form="frmKardexEdit" class="btn btn-primary">
+                                        <i class="bi bi-floppy"></i> Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Acciones (mobile) -->
+                        <div class="d-flex d-md-none gap-2 mt-4">
+                            <a asp-action="Index" class="btn btn-secondary w-50">
+                                <i class="bi bi-arrow-left"></i> Regresar
+                            </a>
+                            <button type="submit" class="btn btn-primary w-50">
+                                <i class="bi bi-floppy"></i> Guardar
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="~/js/kardex/kadex-Edit.js"></script>
+}

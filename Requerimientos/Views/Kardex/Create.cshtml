@@ -38,8 +38,19 @@
 
                             <div class="row g-3">
 
+                                <!-- Producto -->
+                                <div class="col-12">
+                                    <label asp-for="ProductoId" class="form-label mb-1">
+                                        Producto <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="ProductoId" asp-items="ViewBag.Productos" class="form-select">
+                                        <option value="" disabled selected>Seleccione una opción</option>
+                                    </select>
+                                    <span asp-validation-for="ProductoId" class="text-danger small"></span>
+                                </div>
+
                                 <!-- Fecha -->
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-3">
                                     <label asp-for="Fecha" class="form-label mb-1">
                                         Fecha <span class="text-danger">*</span>
                                     </label>
@@ -50,26 +61,8 @@
                                     <span asp-validation-for="Fecha" class="text-danger small"></span>
                                 </div>
 
-                                <!-- Producto -->
-                                <div class="col-12 col-md-4">
-                                    <label asp-for="ProductoId" class="form-label mb-1">
-                                        Producto <span class="text-danger">*</span>
-                                    </label>
-                                    <select asp-for="ProductoId" asp-items="ViewBag.Productos" class="form-select">
-                                        <option value="" disabled selected>Seleccione una opción</option>
-                                    </select>
-                                    <span asp-validation-for="ProductoId" class="text-danger small"></span>
-                                </div>
-
-                                <!-- Proviene -->
-                                <div class="col-12 col-md-4">
-                                    <label asp-for="Proviene" class="form-label mb-1">Proviene</label>
-                                    <input asp-for="Proviene" class="form-control" autocomplete="off" placeholder="Ej: COMPRA" />
-                                    <span asp-validation-for="Proviene" class="text-danger small"></span>
-                                </div>
-
                                 <!-- Cantidad -->
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-3">
                                     <label asp-for="Cantidad" class="form-label mb-1">
                                         Cantidad <span class="text-danger">*</span>
                                     </label>
@@ -78,7 +71,7 @@
                                 </div>
 
                                 <!-- Precio unitario -->
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-3">
                                     <label asp-for="PrecioUnitario" class="form-label mb-1">Precio unitario</label>
                                     <div class="input-group">
                                         <span class="input-group-text">S/</span>
@@ -88,7 +81,7 @@
                                 </div>
 
                                 <!-- Precio venta  -->
-                                <div class="col-12 col-md-4">
+                                <div class="col-12 col-md-3">
                                     <label class="form-label mb-1">Precio venta</label>
                                     <div class="input-group">
                                         <span class="input-group-text">S/</span>
@@ -96,14 +89,16 @@
                                     </div>
                                 </div>
 
-
                                 <!-- Descripción -->
                                 <div class="col-12">
                                     <label asp-for="Descripcion" class="form-label mb-1">
                                         Descripción <span class="text-danger">*</span>
                                     </label>
-                                    <textarea asp-for="Descripcion" class="form-control" rows="3" autocomplete="off"
-                                              placeholder="Ej: Ingreso a inventario / Salida por trabajo..."></textarea>
+                                    <textarea 
+                                        asp-for="Descripcion" 
+                                        class="form-control" 
+                                        rows="3" 
+                                        autocomplete="off"></textarea>
                                     <span asp-validation-for="Descripcion" class="text-danger small"></span>
                                 </div>
 
@@ -131,13 +126,13 @@
                                 <!-- Documentos -->
                                 <div class="col-12 col-md-6">
                                     <label asp-for="DocumentoIngreso" class="form-label mb-1">Documento ingreso</label>
-                                    <input asp-for="DocumentoIngreso" class="form-control" autocomplete="off" placeholder="Ej: FAC F001-000123" />
+                                    <input asp-for="DocumentoIngreso" class="form-control" autocomplete="off"/>
                                     <span asp-validation-for="DocumentoIngreso" class="text-danger small"></span>
                                 </div>
 
                                 <div class="col-12 col-md-6">
                                     <label asp-for="DocumentoSalida" class="form-label mb-1">Documento salida</label>
-                                    <input asp-for="DocumentoSalida" class="form-control" autocomplete="off" placeholder="Ej: GUIA / VALE / OTRO" />
+                                    <input asp-for="DocumentoSalida" class="form-control" autocomplete="off"/>
                                     <span asp-validation-for="DocumentoSalida" class="text-danger small"></span>
                                 </div>
 

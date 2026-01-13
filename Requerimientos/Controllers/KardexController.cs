@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Requerimientos.Data;
 using Requerimientos.Models;
+using Requerimientos.Models.ViewModels;
 using System.Data;
 
 namespace Requerimientos.Controllers
@@ -19,17 +20,49 @@ namespace Requerimientos.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var kardex = _context.Set<Kardex>()
-                .Include(k => k.Producto)
-                    .ThenInclude(p => p!.Categoria)
-                .Include(k => k.QuienEntrega)
-                .Include(k => k.QuienRecibe)
-                .OrderByDescending(k => k.Fecha)
-                .AsNoTracking();
-            return View(kardex);
+            var existencias = _context.Set<Kardex>()
+                .AsNoTracking()
+                .GroupBy(k => k.ProductoId)
+                .Select(g => new
+                {
+                    ProductoId = g.Key,
+                    ExistenciaActual = g.Sum(x => x.Cantidad)
+                });
+
+            var data = await (
+                from k in _context.Set<Kardex>()
+                    .Include(x => x.Producto)
+                    .Include(x => x.QuienEntrega)
+                    .Include(x => x.QuienRecibe)
+                    .AsNoTracking()
+                join e in existencias on k.ProductoId equals e.ProductoId into ej
+                from e in ej.DefaultIfEmpty()
+                orderby k.Fecha descending
+                select new KardexViewModel
+                {
+                    Id = k.Id,
+                    Fecha = k.Fecha,
+                    ProductoId = k.ProductoId,
+                    Codigo = k.Producto != null ? k.Producto.Codigo : "",
+                    Producto = k.Producto != null ? k.Producto.Nombre : "",
+                    Cantidad = k.Cantidad,
+                    Descripcion = k.Descripcion,
+                    Proviene = k.Producto != null ? (k.Producto.Proviene ?? "") : "",
+                    QuienEntrega = k.QuienEntrega != null ? k.QuienEntrega.Nombre : "",
+                    QuienRecibe = k.QuienRecibe != null ? k.QuienRecibe.Nombre : "",
+                    PrecioUnitario = k.PrecioUnitario,
+                    PrecioVenta = k.PrecioVenta,
+                    DocumentoIngreso = k.DocumentoIngreso,
+                    DocumentoSalida = k.DocumentoSalida,
+                    ExistenciaActual = e != null ? e.ExistenciaActual : 0m
+                }
+            ).ToListAsync();
+
+            return View(data);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -50,8 +83,6 @@ namespace Requerimientos.Controllers
 
             if(!string.IsNullOrWhiteSpace(kardex.Descripcion))
                 kardex.Descripcion = kardex.Descripcion.Trim();
-            if(!string.IsNullOrWhiteSpace(kardex.Proviene))
-                kardex.Proviene = kardex.Proviene.Trim();
 
             kardex.PrecioVenta = (kardex.PrecioUnitario ?? 0m) * kardex.Cantidad;
 
@@ -90,8 +121,33 @@ namespace Requerimientos.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(k => k.Id == id);
             if (kardex is null) return NotFound();
-            return View(kardex);
+
+            var existenciaActual = await _context.Set<Kardex>()
+                .Where(k => k.ProductoId == kardex.ProductoId)
+                .SumAsync(k => (decimal?)k.Cantidad) ?? 0m;
+
+            var model = new KardexViewModel
+            {
+                Id = kardex.Id,
+                Fecha = kardex.Fecha,
+                ProductoId = kardex.ProductoId,
+                Codigo = kardex.Producto?.Codigo ?? "",
+                Producto = kardex.Producto?.Nombre ?? "",
+                Proviene = kardex.Producto?.Proviene ?? "",
+                Cantidad = kardex.Cantidad,
+                Descripcion = kardex.Descripcion,
+                QuienEntrega = kardex.QuienEntrega?.Nombre ?? "",
+                QuienRecibe = kardex.QuienRecibe?.Nombre ?? "",
+                PrecioUnitario = kardex.PrecioUnitario,
+                PrecioVenta = kardex.PrecioVenta,
+                DocumentoIngreso = kardex.DocumentoIngreso,
+                DocumentoSalida = kardex.DocumentoSalida,
+                ExistenciaActual = existenciaActual
+            };
+
+            return View(model);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Edit (int? id)
@@ -112,8 +168,6 @@ namespace Requerimientos.Controllers
 
             if (!string.IsNullOrWhiteSpace(kardex.Descripcion))
                 kardex.Descripcion = kardex.Descripcion.Trim();
-            if (!string.IsNullOrWhiteSpace(kardex.Proviene))
-                kardex.Proviene = kardex.Proviene.Trim();
 
             kardex.PrecioVenta = (kardex.PrecioUnitario ?? 0m) * kardex.Cantidad;
 

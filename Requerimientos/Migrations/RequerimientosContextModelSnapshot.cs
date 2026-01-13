@@ -188,6 +188,64 @@ namespace Requerimientos.Migrations
                     b.ToTable("Compra", (string)null);
                 });
 
+            modelBuilder.Entity("Requerimientos.Models.EntregaMaterial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AQuienSeEntregaId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("CantidadEntregada")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<DateOnly>("Fecha")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("FechaRetorno")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly?>("HoraIngreso")
+                        .HasColumnType("time");
+
+                    b.Property<TimeOnly?>("HoraSalida")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Material")
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ResponsableId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Retorno")
+                        .HasMaxLength(200)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AQuienSeEntregaId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.HasIndex("ResponsableId");
+
+                    b.ToTable("EntregaMaterial", (string)null);
+                });
+
             modelBuilder.Entity("Requerimientos.Models.Kardex", b =>
                 {
                     b.Property<int>("Id")
@@ -227,9 +285,6 @@ namespace Requerimientos.Migrations
 
                     b.Property<int>("ProductoId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Proviene")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuienEntregaId")
                         .HasColumnType("int");
@@ -739,6 +794,33 @@ namespace Requerimientos.Migrations
                     b.Navigation("Proveedor");
                 });
 
+            modelBuilder.Entity("Requerimientos.Models.EntregaMaterial", b =>
+                {
+                    b.HasOne("Requerimientos.Models.Trabajador", "AQuienSeEntrega")
+                        .WithMany("EntregasRecibidas")
+                        .HasForeignKey("AQuienSeEntregaId")
+                        .IsRequired()
+                        .HasConstraintName("FK_EntregaMaterial_AQuienSeEntrega_Trabajador");
+
+                    b.HasOne("Requerimientos.Models.Producto", "Producto")
+                        .WithMany("EntregaMateriales")
+                        .HasForeignKey("ProductoId")
+                        .IsRequired()
+                        .HasConstraintName("FK_EntregaMaterial_Producto");
+
+                    b.HasOne("Requerimientos.Models.Trabajador", "Responsable")
+                        .WithMany("EntregasResponsable")
+                        .HasForeignKey("ResponsableId")
+                        .IsRequired()
+                        .HasConstraintName("FK_EntregaMaterial_Responsable_Trabajador");
+
+                    b.Navigation("AQuienSeEntrega");
+
+                    b.Navigation("Producto");
+
+                    b.Navigation("Responsable");
+                });
+
             modelBuilder.Entity("Requerimientos.Models.Kardex", b =>
                 {
                     b.HasOne("Requerimientos.Models.Producto", "Producto")
@@ -869,6 +951,8 @@ namespace Requerimientos.Migrations
 
             modelBuilder.Entity("Requerimientos.Models.Producto", b =>
                 {
+                    b.Navigation("EntregaMateriales");
+
                     b.Navigation("Kardex");
                 });
 
@@ -886,6 +970,10 @@ namespace Requerimientos.Migrations
 
             modelBuilder.Entity("Requerimientos.Models.Trabajador", b =>
                 {
+                    b.Navigation("EntregasRecibidas");
+
+                    b.Navigation("EntregasResponsable");
+
                     b.Navigation("KardexEntregados");
 
                     b.Navigation("KardexRecibidos");

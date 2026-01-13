@@ -29,6 +29,7 @@ public partial class RequerimientosContext : DbContext
     public virtual DbSet<Producto> Productos{ get; set; }
     public virtual DbSet<Unidad> Unidades{ get; set; }
     public virtual DbSet<Kardex> Kardex { get; set; }
+    public virtual DbSet<EntregaMaterial> EntregaMateriales { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -473,6 +474,52 @@ public partial class RequerimientosContext : DbContext
                 .HasForeignKey(d => d.QuienEntregaId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Kardex_QuienEntrega_Trabajador");
+        });
+
+        modelBuilder.Entity<EntregaMaterial>(entity =>
+        {
+            entity.ToTable("EntregaMaterial");
+            entity.Property(e => e.Fecha)
+                .HasColumnType("date")
+                .IsRequired(true);
+            entity.Property(e => e.CantidadEntregada)
+                .HasColumnType("decimal(18,2)")
+                .IsRequired(true);
+            entity.Property(e => e.Material)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .IsRequired(false);
+            entity.Property(e => e.Retorno)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .IsRequired(false);
+            entity.Property(e => e.HoraSalida)
+                .HasColumnType("time")
+                .IsRequired(false);
+            entity.Property(e => e.HoraIngreso)
+                .HasColumnType("time")
+                .IsRequired(false);
+            entity.Property(e => e.FechaRetorno)
+                .HasColumnType("date")
+                .IsRequired(false);
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasDefaultValueSql("(getdate())");
+            entity.HasOne(d => d.Producto)
+                .WithMany(p => p.EntregaMateriales)
+                .HasForeignKey(d => d.ProductoId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EntregaMaterial_Producto");
+            entity.HasOne(d => d.AQuienSeEntrega)
+                .WithMany(d => d.EntregasRecibidas)
+                .HasForeignKey(d => d.AQuienSeEntregaId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EntregaMaterial_AQuienSeEntrega_Trabajador");
+            entity.HasOne(d => d.Responsable)
+                .WithMany(d => d.EntregasResponsable)
+                .HasForeignKey(d => d.ResponsableId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EntregaMaterial_Responsable_Trabajador");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,5 +1,6 @@
 ﻿@using NonFactors.Mvc.Grid
-@model IQueryable<Requerimientos.Models.Kardex>
+@using Requerimientos.Models.ViewModels
+@model IEnumerable<KardexViewModel>
 
 @{
     ViewData["Title"] = "Entradas y salidas";
@@ -25,18 +26,15 @@
         {
             columns.Add(k => k.Fecha).Titled("Fecha").Formatted("{0:dd/MM/yyyy}");
 
-            columns.Add(k => k.Producto!.Codigo).Titled("Código");
-            columns.Add(k => k.Producto!.Nombre).Titled("Producto");
+            columns.Add(k => k.Codigo).Titled("Código");
+            columns.Add(k => k.Producto).Titled("Producto");
             @* columns.Add(k => k.Producto!.Categoria!.Nombre).Titled("Categoría"); *@
             @* columns.Add(k => k.Pertenece!.Nombre).Titled("Almacén"); *@
-
+            columns.Add(k => k.ExistenciaActual).Titled("Existencia actual").Formatted("{0:0.##}");
             columns.Add(k => k.Cantidad).Titled("Cantidad").Formatted("{0:0}");
             columns.Add(k => k.Descripcion).Titled("Descripción");
-
-            columns.Add(k => k.Proviene).Titled("Proviene");
-
-            columns.Add(k => k.QuienEntrega!.Nombre).Titled("Quién entrega");
-            columns.Add(k => k.QuienRecibe!.Nombre).Titled("Quién recibe");
+            columns.Add(k => k.QuienEntrega).Titled("Quién entrega");
+            columns.Add(k => k.QuienRecibe).Titled("Quién recibe");
 
             columns.Add(k => k.PrecioUnitario).Titled("Prec. unitario").Formatted("S/ {0:N2}");
             columns.Add(k => k.PrecioVenta).Titled("Prec. venta").Formatted("S/ {0:N2}");

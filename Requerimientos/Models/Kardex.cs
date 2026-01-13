@@ -17,8 +17,6 @@ namespace Requerimientos.Models
         [Required(ErrorMessage = "Campo obligatorio.")]
         public string Descripcion { get; set; } = null!;
 
-        public string? Proviene { get; set; }
-
         [Column(TypeName = "money")]
         public decimal? PrecioUnitario { get; set; }
         [Column(TypeName = "money")]

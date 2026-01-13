@@ -29,5 +29,8 @@ namespace Requerimientos.Models
 
         public virtual ICollection<Kardex> KardexEntregados { get; set; } = [];
         public virtual ICollection<Kardex> KardexRecibidos { get; set; } = [];
+
+        public virtual ICollection<EntregaMaterial> EntregasRecibidas { get; set; } = [];
+        public virtual ICollection<EntregaMaterial> EntregasResponsable { get; set; } = [];
     }
 }

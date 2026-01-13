@@ -30,6 +30,7 @@ namespace Requerimientos.Models
         public virtual Pertenece? Pertenece { get; set; }
 
         public virtual ICollection<Kardex> Kardex { get; set; } = [];
+        public virtual ICollection<EntregaMaterial> EntregaMateriales { get; set; } = [];
 
     }
 }

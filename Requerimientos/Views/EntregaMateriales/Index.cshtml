@@ -1,0 +1,60 @@
+﻿@using NonFactors.Mvc.Grid
+@model IQueryable<Requerimientos.Models.EntregaMaterial>
+
+@{
+    ViewData["Title"] = "Entrega de materiales";
+    var controller = (string)ViewContext.RouteData.Values["controller"]!;
+}
+
+<h1 class="h1" style="font-size: 1.5rem;">@ViewData["Title"]</h1>
+
+@await Html.PartialAsync("_Tabs")
+
+<div class="col-12">
+    <a asp-controller="@controller" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i>
+        Nuevo registro
+    </a>
+</div>
+
+<div class="tabla-ui pt-4">
+    @(
+        Html.Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(e => e.Fecha).Titled("Fecha").Formatted("{0:dd/MM/yyyy}");
+
+            columns.Add(e => e.Producto != null ? e.Producto.Codigo : "").Titled("Código producto");
+            columns.Add(e => e.Producto != null ? e.Producto.Nombre : "").Titled("Descripción producto");
+
+            columns.Add(e => e.CantidadEntregada).Titled("Cantidad").Formatted("{0:0.##}");
+            columns.Add(e => e.Producto != null && e.Producto.Unidad != null ? e.Producto.Unidad.Simbolo : "").Titled("Unidad");
+
+            columns.Add(e => e.AQuienSeEntrega != null ? e.AQuienSeEntrega.Nombre : "").Titled("A quién se entrega");
+            columns.Add(e => e.Responsable != null ? e.Responsable.Nombre : "").Titled("Responsable");
+
+            columns.Add(e => e.Material).Titled("Material");
+            columns.Add(e => e.Retorno).Titled("Retorno");
+
+            columns.Add(e => e.HoraSalida).Titled("Hora salida").Formatted("{0:HH:mm}");
+            columns.Add(e => e.HoraIngreso).Titled("Hora ingreso").Formatted("{0:HH:mm}");
+
+            columns.Add(e => e.FechaRetorno).Titled("Fecha retorno").Formatted("{0:dd/MM/yyyy}");
+
+            columns.Add(e =>
+            $"<a class='text-info me-2' href='{Url.Action("Details", controller, new { id = e.Id })}' title='Detalles'><i class='bi bi-eye-fill'></i></a>" +
+            $"<a class='text-warning me-2' href='{Url.Action("Edit", controller, new { id = e.Id })}' title='Editar'><i class='bi bi-pencil-fill'></i></a>" +
+            $"<a class='text-danger' href='{Url.Action("Delete", controller, new { id = e.Id })}' title='Eliminar' onclick=\"return confirm('¿Eliminar este registro?');\"><i class='bi bi-trash3-fill'></i></a>"
+            ).Titled("").Encoded(false);
+        })
+        .Empty("No hay datos en esta tabla.")
+        .Filterable()
+        .Sortable()
+        .Pageable(p =>
+        {
+            p.PageSizes = new Dictionary<int, string> { { 0, "Todos" }, { 5, "5" }, { 10, "10" }, { 15, "15" }, { 20, "20" } };
+            p.ShowPageSizes = true;
+            p.RowsPerPage = 15;
+        })
+        )
+</div>
